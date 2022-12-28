@@ -1,9 +1,10 @@
 package rs.raf.kakuro.gui.view;
 
-import rs.raf.kakuro.gui.view.editor.CellBase;
-import rs.raf.kakuro.gui.view.editor.ClueCell;
-import rs.raf.kakuro.gui.view.editor.EmptyCell;
-import rs.raf.kakuro.gui.view.editor.ValueCell;
+import rs.raf.kakuro.gui.model.CellBase;
+import rs.raf.kakuro.gui.view.editor.EditorCellBase;
+import rs.raf.kakuro.gui.view.editor.EditorClueCell;
+import rs.raf.kakuro.gui.view.editor.EditorEmptyCell;
+import rs.raf.kakuro.gui.view.editor.EditorValueCell;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -24,7 +25,7 @@ public class Editor extends JPanel {
         return instance;
     }
 
-    private CellBase[][] kakuroCells;
+    private EditorCellBase[][] kakuroCells;
 
     private Editor() { }
 
@@ -44,18 +45,18 @@ public class Editor extends JPanel {
     }
 
     private void initializeComponents() {
-        kakuroCells = new CellBase[rows][columns];
+        kakuroCells = new EditorCellBase[rows][columns];
 
         for (int row = 0; row < rows; ++row)
             for (int column = 0; column < columns; ++column)
                 kakuroCells[row][column] = getCell(row, column);
     }
 
-    private CellBase getCell(int row, int column) {
+    private EditorCellBase getCell(int row, int column) {
         boolean isFistLayer   = row == 0 || row == rows - 1 || column == 0 || column == columns - 1;
         boolean isSecondLayer = row == 1 || row == rows - 2 || column == 1 || column == columns - 2;
 
-        return isFistLayer ? new EmptyCell(row, column) : isSecondLayer ? new ClueCell(row, column) : new ValueCell(row, column);
+        return isFistLayer ? new EditorEmptyCell(row, column) : isSecondLayer ? new EditorClueCell(row, column) : new EditorValueCell(row, column);
     }
 
     private void addComponents() {
@@ -69,6 +70,8 @@ public class Editor extends JPanel {
 
     //endregion
 
+    //region State Methods
+
     public void changeToSuccessor(int row, int column) {
         kakuroCells[row][column] = kakuroCells[row][column].getSuccessor();
 
@@ -79,15 +82,27 @@ public class Editor extends JPanel {
     }
 
     public void setSwitchState() {
-        for (CellBase[] rowCells: kakuroCells)
-            for (CellBase cell: rowCells)
+        for (EditorCellBase[] rowCells: kakuroCells)
+            for (EditorCellBase cell: rowCells)
                 cell.setupSwitchAction();
     }
 
     public void setEditState() {
-        for (CellBase[] rowCells: kakuroCells)
-            for (CellBase cell: rowCells)
+        for (EditorCellBase[] rowCells: kakuroCells)
+            for (EditorCellBase cell: rowCells)
                 cell.setupEditAction();
+    }
+
+    //endregion
+
+    public CellBase[][] getCells() {
+        CellBase[][] cells = new CellBase[rows][columns];
+
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < columns; ++j)
+                cells[i][j] = kakuroCells[i][j].getCell();
+
+        return cells;
     }
 
 }

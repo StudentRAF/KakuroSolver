@@ -5,6 +5,7 @@ import com.formdev.flatlaf.util.ColorFunctions;
 import rs.raf.kakuro.gui.controller.ActionManager;
 import rs.raf.kakuro.gui.controller.action.EditCellAction;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
+import rs.raf.kakuro.gui.model.CellBase;
 
 import javax.swing.Action;
 import java.awt.Color;
@@ -12,7 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-public abstract class CellBase extends FlatButton {
+public abstract class EditorCellBase extends FlatButton {
 
     protected static final Color BASE_BACKGROUND_COLOR = new Color(59, 61, 63);
     protected static final Color BASE_FOREGROUND_COLOR = new Color(162, 164, 166);
@@ -24,7 +25,7 @@ public abstract class CellBase extends FlatButton {
     protected int row;
     protected int column;
 
-    public CellBase(int row, int column) {
+    public EditorCellBase(int row, int column) {
         setButtonType(FlatButton.ButtonType.square);
 
         this.row    = row;
@@ -57,11 +58,11 @@ public abstract class CellBase extends FlatButton {
 
     protected abstract void paintCell(Graphics2D graphics);
 
-    public abstract CellBase getSuccessor();
+    public abstract EditorCellBase getSuccessor();
 
     public abstract void editCell();
 
-    public abstract CellType getType();
+    public abstract CellBase getCell();
 
     public int getRow() {
         return row;

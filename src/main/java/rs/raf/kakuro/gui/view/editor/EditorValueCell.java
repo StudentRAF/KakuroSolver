@@ -2,6 +2,8 @@ package rs.raf.kakuro.gui.view.editor;
 
 import com.formdev.flatlaf.util.ColorFunctions;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
+import rs.raf.kakuro.gui.model.CellBase;
+import rs.raf.kakuro.gui.model.ValueCell;
 import rs.raf.kakuro.gui.util.model.Fonts;
 
 import java.awt.Color;
@@ -13,11 +15,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-public class ValueCell extends CellBase {
+public class EditorValueCell extends EditorCellBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = ColorFunctions.lighten(BASE_BACKGROUND_COLOR, 0.01f);
@@ -32,24 +32,12 @@ public class ValueCell extends CellBase {
 
     private int borderThickness = 2;
 
-    private final List<Boolean> notes = new ArrayList<>() {
-        {
-            add(true);
-            add(true);
-            add(true);
-            add(true);
-            add(true);
-            add(true);
-            add(true);
-            add(true);
-            add(true);
-        }
-    };
+    private final ValueCell cell;
 
-    private int value = 0;
-
-    public ValueCell(int row, int column) {
+    public EditorValueCell(int row, int column) {
         super(row, column);
+
+        cell = new ValueCell(row, column);
 
         addFocusListener(new CellFocusListener());
         addKeyListener(new CellKeyListener());
@@ -60,7 +48,7 @@ public class ValueCell extends CellBase {
         paintCellBorder(graphics);
         paintCellBackground(graphics);
 
-        if (value != 0)
+        if (cell.getValue() > 0)
             paintCellValue(graphics);
         else
             paintCellNotes(graphics);
@@ -84,15 +72,15 @@ public class ValueCell extends CellBase {
         graphics.setFont(font);
         graphics.setColor(foregroundColor);
 
-        int x = (getWidth() - metrics.stringWidth(Integer.toString(value))) / 2;
+        int x = (getWidth() - metrics.stringWidth(Integer.toString(cell.getValue()))) / 2;
         int y = (getHeight() - metrics.getHeight()) / 2 + metrics.getAscent() + 4;
 
-        graphics.drawString(Integer.toString(value), x, y);
+        graphics.drawString(Integer.toString(cell.getValue()), x, y);
     }
 
     private void paintCellNotes(Graphics2D graphics) {
-        for (int index = 0; index < notes.size(); ++index)
-            if (notes.get(index))
+        for (int index = 0; index < cell.getNotes().length; ++index)
+            if (cell.getNotes()[index])
                 paintCellNote(graphics, index);
     }
 
@@ -115,16 +103,16 @@ public class ValueCell extends CellBase {
 
 
     @Override
-    public CellBase getSuccessor() {
-        return new EmptyCell(row, column);
+    public EditorCellBase getSuccessor() {
+        return new EditorEmptyCell(row, column);
     }
 
     @Override
     public void editCell() { }
 
     @Override
-    public CellType getType() {
-        return CellType.VALUE;
+    public CellBase getCell() {
+        return cell;
     }
 
     //region Listeners
@@ -203,7 +191,7 @@ public class ValueCell extends CellBase {
      * @param value value
      */
     public void setValue(int value) {
-        this.value = value;
+        cell.setValue(value);
         repaint();
     }
 
@@ -212,7 +200,7 @@ public class ValueCell extends CellBase {
      * @return value
      */
     public int getValue() {
-        return value;
+        return cell.getValue();
     }
 
     //endregion

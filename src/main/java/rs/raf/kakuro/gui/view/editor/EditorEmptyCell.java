@@ -1,6 +1,8 @@
 package rs.raf.kakuro.gui.view.editor;
 
 import com.formdev.flatlaf.util.ColorFunctions;
+import rs.raf.kakuro.gui.model.CellBase;
+import rs.raf.kakuro.gui.model.EmptyCell;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,7 +10,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.geom.Rectangle2D;
 
-public class EmptyCell extends CellBase {
+public class EditorEmptyCell extends EditorCellBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = ColorFunctions.darken(BASE_BACKGROUND_COLOR, 0.03f);
@@ -20,8 +22,12 @@ public class EmptyCell extends CellBase {
 
     private int borderThickness = 2;
 
-    public EmptyCell(int row, int column) {
+    private final EmptyCell cell;
+
+    public EditorEmptyCell(int row, int column) {
         super(row, column);
+
+        cell = new EmptyCell(row, column);
 
         addFocusListener(new CellFocusListener());
     }
@@ -43,16 +49,16 @@ public class EmptyCell extends CellBase {
     }
 
     @Override
-    public CellBase getSuccessor() {
-        return new ClueCell(row, column);
+    public EditorCellBase getSuccessor() {
+        return new EditorClueCell(row, column);
     }
 
     @Override
     public void editCell() { }
 
     @Override
-    public CellType getType() {
-        return CellType.EMPTY;
+    public CellBase getCell() {
+        return cell;
     }
 
     //region Listeners

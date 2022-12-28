@@ -1,6 +1,6 @@
 package rs.raf.kakuro.gui.controller.action;
 
-import rs.raf.kakuro.gui.view.editor.CellBase;
+import rs.raf.kakuro.gui.view.editor.EditorCellBase;
 
 import java.awt.event.ActionEvent;
 
@@ -12,7 +12,7 @@ public class EditCellAction extends KakuroAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        ((CellBase) event.getSource()).editCell();
+        ((EditorCellBase) event.getSource()).editCell();
     }
 
 }

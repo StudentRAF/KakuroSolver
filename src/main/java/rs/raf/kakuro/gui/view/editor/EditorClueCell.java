@@ -2,6 +2,8 @@ package rs.raf.kakuro.gui.view.editor;
 
 import com.formdev.flatlaf.util.ColorFunctions;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
+import rs.raf.kakuro.gui.model.CellBase;
+import rs.raf.kakuro.gui.model.ClueCell;
 import rs.raf.kakuro.gui.util.model.Fonts;
 
 import java.awt.BasicStroke;
@@ -22,7 +24,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
 
-public class ClueCell extends CellBase {
+public class EditorClueCell extends EditorCellBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
@@ -40,14 +42,15 @@ public class ClueCell extends CellBase {
     private int selectionThickness = 3;
     private int diagonalThickness  = 2;
 
-    private int rightClue  = 0;
-    private int bottomClue = 0;
-
     private boolean activeRight = false;
     private boolean activeLeft  = false;
 
-    public ClueCell(int row, int column) {
+    private final ClueCell cell;
+
+    public EditorClueCell(int row, int column) {
         super(row, column);
+
+        cell = new ClueCell(row, column);
 
         addKeyListener(new CellKeyListener());
         addFocusListener(new CellFocusListener());
@@ -59,10 +62,10 @@ public class ClueCell extends CellBase {
         paintCellBorder(graphics);
         paintCellBackground(graphics);
 
-        if (rightClue > 0)
+        if (cell.getRightClue() > 0)
             paintCellRightClue(graphics);
 
-        if (bottomClue > 0)
+        if (cell.getBottomClue() > 0)
             paintCellBottomClue(graphics);
 
         graphics.setStroke(new BasicStroke(selectionThickness));
@@ -93,12 +96,12 @@ public class ClueCell extends CellBase {
 
         Point right = getRightLocation(font);
 
-        graphics.drawString(Integer.toString(rightClue), right.x, right.y);
+        graphics.drawString(Integer.toString(cell.getRightClue()), right.x, right.y);
     }
 
     private Point getRightLocation(Font font) {
         FontMetrics metrics = new Canvas().getFontMetrics(font);
-        return new Point(60 - metrics.stringWidth(Integer.toString(rightClue)) / 2, 37);
+        return new Point(60 - metrics.stringWidth(Integer.toString(cell.getRightClue())) / 2, 37);
     }
 
     private void paintCellBottomClue(Graphics2D graphics) {
@@ -109,12 +112,12 @@ public class ClueCell extends CellBase {
 
         Point bottom = getBottomLocation(font);
 
-        graphics.drawString(Integer.toString(bottomClue), bottom.x, bottom.y);
+        graphics.drawString(Integer.toString(cell.getBottomClue()), bottom.x, bottom.y);
     }
 
     private Point getBottomLocation(Font font) {
         FontMetrics metrics = new Canvas().getFontMetrics(font);
-        return new Point(28 - metrics.stringWidth(Integer.toString(bottomClue)) / 2, 73);
+        return new Point(28 - metrics.stringWidth(Integer.toString(cell.getBottomClue())) / 2, 73);
     }
 
     private void paintCellClueDivider(Graphics2D graphics) {
@@ -170,8 +173,8 @@ public class ClueCell extends CellBase {
     //endregion
 
     @Override
-    public CellBase getSuccessor() {
-        return new ValueCell(row, column);
+    public EditorCellBase getSuccessor() {
+        return new EditorValueCell(row, column);
     }
 
     @Override
@@ -180,8 +183,8 @@ public class ClueCell extends CellBase {
     }
 
     @Override
-    public CellType getType() {
-        return CellType.CLUE;
+    public CellBase getCell() {
+        return cell;
     }
 
     //region Listeners
@@ -286,11 +289,11 @@ public class ClueCell extends CellBase {
     }
 
     private void addToRightClue(int value) {
-        setRightClue(value == -2 ? 0 : value == -1 ? getRightClue() / 10 : Math.min(getRightClue() * 10 + value, 45));
+        setRightClue(value == -2 ? 0 : value == -1 ? cell.getRightClue() / 10 : Math.min(cell.getRightClue() * 10 + value, 45));
     }
 
     private void addToBottomClue(int value) {
-        setBottomClue(value == -2 ? 0 : value == -1 ? getBottomClue() / 10 : Math.min(getBottomClue() * 10 + value, 45));
+        setBottomClue(value == -2 ? 0 : value == -1 ? cell.getBottomClue() / 10 : Math.min(cell.getBottomClue() * 10 + value, 45));
     }
 
     /**
@@ -298,7 +301,7 @@ public class ClueCell extends CellBase {
      * @param clue clue
      */
     public void setRightClue(int clue) {
-        rightClue = clue;
+        cell.setRightClue(clue);
         repaint();
     }
 
@@ -307,24 +310,8 @@ public class ClueCell extends CellBase {
      * @param clue clue
      */
     public void setBottomClue(int clue) {
-        bottomClue = clue;
+        cell.setBottomClue(clue);
         repaint();
-    }
-
-    /**
-     * Returns the top right clue.
-     * @return clue
-     */
-    public int getRightClue() {
-        return rightClue;
-    }
-
-    /**
-     * Returns the bottom left clue.
-     * @return clue
-     */
-    public int getBottomClue() {
-        return bottomClue;
     }
 
     //endregion
