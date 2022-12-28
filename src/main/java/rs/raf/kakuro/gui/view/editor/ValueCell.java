@@ -13,6 +13,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ValueCell extends CellBase {
@@ -30,6 +32,20 @@ public class ValueCell extends CellBase {
 
     private int borderThickness = 2;
 
+    private final List<Boolean> notes = new ArrayList<>() {
+        {
+            add(true);
+            add(true);
+            add(true);
+            add(true);
+            add(true);
+            add(true);
+            add(true);
+            add(true);
+            add(true);
+        }
+    };
+
     private int value = 0;
 
     public ValueCell(int row, int column) {
@@ -41,26 +57,62 @@ public class ValueCell extends CellBase {
 
     @Override
     protected void paintCell(Graphics2D graphics) {
-        Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 36);
+        paintCellBorder(graphics);
+        paintCellBackground(graphics);
 
+        if (value != 0)
+            paintCellValue(graphics);
+        else
+            paintCellNotes(graphics);
+    }
+
+    private void paintCellBorder(Graphics2D graphics) {
         graphics.setColor(borderColor);
         graphics.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
+    }
 
+    private void paintCellBackground(Graphics2D graphics) {
         graphics.setColor(backgroundColor);
-        graphics.fill(new Rectangle2D.Double(borderThickness,                  borderThickness,
-                                             getWidth() - 2 * borderThickness, getHeight() - 2 * borderThickness));
+        graphics.fill(new Rectangle2D.Double(borderThickness, borderThickness, getWidth() - 2 * borderThickness, getHeight() - 2 * borderThickness));
+    }
+
+    private void paintCellValue(Graphics2D graphics) {
+        Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 36);
 
         FontMetrics metrics = graphics.getFontMetrics(font);
-
-        int x = (getWidth() - metrics.stringWidth(Integer.toString(value))) / 2;
-        int y = (getHeight() - metrics.getHeight()) / 2 + metrics.getAscent() + 4;
 
         graphics.setFont(font);
         graphics.setColor(foregroundColor);
 
-        if (value != 0)
-            graphics.drawString(Integer.toString(value), x, y);
+        int x = (getWidth() - metrics.stringWidth(Integer.toString(value))) / 2;
+        int y = (getHeight() - metrics.getHeight()) / 2 + metrics.getAscent() + 4;
+
+        graphics.drawString(Integer.toString(value), x, y);
     }
+
+    private void paintCellNotes(Graphics2D graphics) {
+        for (int index = 0; index < notes.size(); ++index)
+            if (notes.get(index))
+                paintCellNote(graphics, index);
+    }
+
+    private void paintCellNote(Graphics2D graphics, int value) {
+        Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 22);
+
+        FontMetrics metrics = graphics.getFontMetrics(font);
+
+        graphics.setFont(font);
+        graphics.setColor(foregroundColor);
+
+        int thirdWidth  = getWidth() / 3 - 4;
+        int thirdHeight = getHeight() / 3 - 4;
+
+        int x = (thirdWidth - metrics.stringWidth(Integer.toString(value))) / 2 + thirdWidth * (value % 3) + 6;
+        int y = (thirdHeight + metrics.getAscent()) / 2 + thirdHeight * (value / 3) + 6;
+
+        graphics.drawString(Integer.toString(value + 1), x, y);
+    }
+
 
     @Override
     public CellBase getSuccessor() {
@@ -69,6 +121,11 @@ public class ValueCell extends CellBase {
 
     @Override
     public void editCell() { }
+
+    @Override
+    public CellType getType() {
+        return CellType.VALUE;
+    }
 
     //region Listeners
 

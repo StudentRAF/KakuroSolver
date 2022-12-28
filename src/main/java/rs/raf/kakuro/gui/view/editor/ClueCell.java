@@ -40,11 +40,11 @@ public class ClueCell extends CellBase {
     private int selectionThickness = 3;
     private int diagonalThickness  = 2;
 
-    private int clueTopRight   = 0;
-    private int clueBottomLeft = 0;
+    private int rightClue  = 0;
+    private int bottomClue = 0;
 
-    private boolean activeTopRight   = false;
-    private boolean activeBottomLeft = false;
+    private boolean activeRight = false;
+    private boolean activeLeft  = false;
 
     public ClueCell(int row, int column) {
         super(row, column);
@@ -72,15 +72,15 @@ public class ClueCell extends CellBase {
         Point topRight   = getTopRightLocation(font);
         Point bottomLeft = getBottomLeftLocation(font);
 
-        if (clueTopRight > 0)
-            graphics.drawString(Integer.toString(clueTopRight), topRight.x, topRight.y);
+        if (rightClue > 0)
+            graphics.drawString(Integer.toString(rightClue), topRight.x, topRight.y);
 
-        if (clueBottomLeft > 0)
-            graphics.drawString(Integer.toString(clueBottomLeft), bottomLeft.x, bottomLeft.y);
+        if (bottomClue > 0)
+            graphics.drawString(Integer.toString(bottomClue), bottomLeft.x, bottomLeft.y);
 
         graphics.setStroke(new BasicStroke(selectionThickness));
 
-        if (!activeTopRight && !activeBottomLeft) {
+        if (!activeRight && !activeLeft) {
             graphics.setColor(foregroundColor);
             graphics.setStroke(new BasicStroke(diagonalThickness));
             graphics.draw(new Line2D.Double(15, 15, getWidth() - 16, getHeight() - 16));
@@ -89,7 +89,7 @@ public class ClueCell extends CellBase {
             graphics.setColor(selectionColor);
             graphics.setStroke(new BasicStroke(selectionThickness));
 
-            if (activeTopRight)
+            if (activeRight)
                 graphics.draw(getTopRightPath());
             else
                 graphics.draw(getBottomLeftPath());
@@ -99,12 +99,12 @@ public class ClueCell extends CellBase {
 
     private Point getTopRightLocation(Font font) {
         FontMetrics metrics = new Canvas().getFontMetrics(font);
-        return new Point(60 - metrics.stringWidth(Integer.toString(clueTopRight)) / 2, 37);
+        return new Point(60 - metrics.stringWidth(Integer.toString(rightClue)) / 2, 37);
     }
 
     private Point getBottomLeftLocation(Font font) {
         FontMetrics metrics = new Canvas().getFontMetrics(font);
-        return new Point(28 - metrics.stringWidth(Integer.toString(clueBottomLeft)) / 2, 73);
+        return new Point(28 - metrics.stringWidth(Integer.toString(bottomClue)) / 2, 73);
     }
 
     private Path2D getTopRightPath() {
@@ -139,6 +139,11 @@ public class ClueCell extends CellBase {
 
     }
 
+    @Override
+    public CellType getType() {
+        return CellType.CLUE;
+    }
+
     //region Listeners
 
     private class CellFocusListener extends FocusAdapter {
@@ -162,7 +167,7 @@ public class ClueCell extends CellBase {
             backgroundColor = BACKGROUND_COLOR;
             foregroundColor = FOREGROUND_COLOR;
 
-            activeBottomLeft = activeTopRight = false;
+            activeLeft = activeRight = false;
 
             repaint();
         }
@@ -213,7 +218,7 @@ public class ClueCell extends CellBase {
             if (currentAction instanceof SwitchCellAction)
                 return;
 
-            activeTopRight = !(activeBottomLeft = getBottomLeftShape().contains(event.getPoint()));
+            activeRight = !(activeLeft = getBottomLeftShape().contains(event.getPoint()));
         }
 
         private Path2D getBottomLeftShape() {
@@ -234,26 +239,26 @@ public class ClueCell extends CellBase {
     //region Setters and Getters
 
     private void addToActiveValue(int value) {
-        if (activeTopRight)
-            addToClueTopRight(value);
+        if (activeRight)
+            addToRightClue(value);
         else
-            addToClueBottomLeft(value);
+            addToBottomClue(value);
     }
 
-    private void addToClueTopRight(int value) {
-        setClueTopRight(value == -2 ? 0 : value == -1 ? getClueTopRight() / 10 : Math.min(getClueTopRight() * 10 + value, 45));
+    private void addToRightClue(int value) {
+        setRightClue(value == -2 ? 0 : value == -1 ? getRightClue() / 10 : Math.min(getRightClue() * 10 + value, 45));
     }
 
-    private void addToClueBottomLeft(int value) {
-        setClueBottomLeft(value == -2 ? 0 : value == -1 ? getClueBottomLeft() / 10 : Math.min(getClueBottomLeft() * 10 + value, 45));
+    private void addToBottomClue(int value) {
+        setBottomClue(value == -2 ? 0 : value == -1 ? getBottomClue() / 10 : Math.min(getBottomClue() * 10 + value, 45));
     }
 
     /**
      * Sets the top right clue.
      * @param clue clue
      */
-    public void setClueTopRight(int clue) {
-        clueTopRight = clue;
+    public void setRightClue(int clue) {
+        rightClue = clue;
         repaint();
     }
 
@@ -261,8 +266,8 @@ public class ClueCell extends CellBase {
      * Sets the bottom left clue.
      * @param clue clue
      */
-    public void setClueBottomLeft(int clue) {
-        clueBottomLeft = clue;
+    public void setBottomClue(int clue) {
+        bottomClue = clue;
         repaint();
     }
 
@@ -270,16 +275,16 @@ public class ClueCell extends CellBase {
      * Returns the top right clue.
      * @return clue
      */
-    public int getClueTopRight() {
-        return clueTopRight;
+    public int getRightClue() {
+        return rightClue;
     }
 
     /**
      * Returns the bottom left clue.
      * @return clue
      */
-    public int getClueBottomLeft() {
-        return clueBottomLeft;
+    public int getBottomClue() {
+        return bottomClue;
     }
 
     //endregion

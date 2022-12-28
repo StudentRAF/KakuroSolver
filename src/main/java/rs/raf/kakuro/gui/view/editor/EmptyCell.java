@@ -44,6 +44,11 @@ public class EmptyCell extends CellBase {
     @Override
     public void editCell() { }
 
+    @Override
+    public CellType getType() {
+        return CellType.EMPTY;
+    }
+
     //region Listeners
 
     private class CellFocusListener extends FocusAdapter {

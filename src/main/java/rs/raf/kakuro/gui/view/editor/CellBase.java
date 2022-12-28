@@ -61,6 +61,8 @@ public abstract class CellBase extends FlatButton {
 
     public abstract void editCell();
 
+    public abstract CellType getType();
+
     public int getRow() {
         return row;
     }
