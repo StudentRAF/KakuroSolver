@@ -1,7 +1,7 @@
 package rs.raf.kakuro.gui.view;
 
 import rs.raf.kakuro.gui.util.ImageUtils;
-import rs.raf.kakuro.gui.view.toolbar.KakuroToolbar;
+import rs.raf.kakuro.gui.view.toolbar.Toolbar;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
@@ -41,8 +41,8 @@ public class ApplicationWindow extends JFrame {
     private void initializeComponents() { }
 
     private void addComponents() {
-        add(new KakuroToolbar(), BorderLayout.NORTH);
-        add(KakuroEditor.editor, BorderLayout.CENTER);
+        add(new Toolbar(), BorderLayout.NORTH);
+        add(Editor.editor, BorderLayout.CENTER);
     }
 
 }

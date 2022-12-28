@@ -1,6 +1,6 @@
 package rs.raf.kakuro.gui.controller.action;
 
-import rs.raf.kakuro.gui.view.KakuroEditor;
+import rs.raf.kakuro.gui.view.Editor;
 
 import java.awt.event.ActionEvent;
 
@@ -12,7 +12,7 @@ public class EditStateAction extends KakuroAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        KakuroEditor.editor.setEditState();
+        Editor.editor.setEditState();
     }
 
 }

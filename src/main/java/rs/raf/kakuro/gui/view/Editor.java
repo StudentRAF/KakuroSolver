@@ -10,15 +10,15 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-public class KakuroEditor extends JPanel {
+public class Editor extends JPanel {
 
     public static final int rows = 10;
     public static final int columns = 13;
 
-    public static final KakuroEditor editor = instantiate();
+    public static final Editor editor = instantiate();
 
-    private static KakuroEditor instantiate() {
-        KakuroEditor instance = new KakuroEditor();
+    private static Editor instantiate() {
+        Editor instance = new Editor();
         instance.initialize();
 
         return instance;
@@ -26,7 +26,7 @@ public class KakuroEditor extends JPanel {
 
     private CellBase[][] kakuroCells;
 
-    private KakuroEditor() { }
+    private Editor() { }
 
     //region Initialization
 

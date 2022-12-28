@@ -1,6 +1,7 @@
 package rs.raf.kakuro.gui.view.editor;
 
 import com.formdev.flatlaf.util.ColorFunctions;
+import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
 import rs.raf.kakuro.gui.util.model.Fonts;
 
 import java.awt.BasicStroke;
@@ -144,6 +145,9 @@ public class ClueCell extends CellBase {
 
         @Override
         public void focusGained(FocusEvent event) {
+            if (currentAction instanceof SwitchCellAction)
+                return;
+
             selectionColor  = BORDER_FOCUS_COLOR;
             backgroundColor = BACKGROUND_FOCUS_COLOR;
             foregroundColor = FOREGROUND_FOCUS_COLOR;
@@ -206,6 +210,9 @@ public class ClueCell extends CellBase {
 
         @Override
         public void mousePressed(MouseEvent event) {
+            if (currentAction instanceof SwitchCellAction)
+                return;
+
             activeTopRight = !(activeBottomLeft = getBottomLeftShape().contains(event.getPoint()));
         }
 
