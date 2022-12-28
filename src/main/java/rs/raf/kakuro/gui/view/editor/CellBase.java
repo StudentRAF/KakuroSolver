@@ -17,7 +17,7 @@ public abstract class CellBase extends FlatButton {
     protected static final Color BASE_BACKGROUND_COLOR = new Color(59, 61, 63);
     protected static final Color BASE_FOREGROUND_COLOR = new Color(162, 164, 166);
     protected static final Color BASE_BORDER_COLOR = ColorFunctions.lighten(new Color(59, 61, 63), 0.1f);
-    protected static final Color BASE_BORDER_FOCUS_COLOR = new Color(10, 133, 237, 130);
+    protected static final Color BASE_BORDER_FOCUS_COLOR = new Color(10, 103, 218);
 
     protected static Action currentAction = null;
 

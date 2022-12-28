@@ -3,7 +3,6 @@ package rs.raf.kakuro.gui.util;
 import rs.raf.kakuro.gui.util.model.Language;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class LanguageUtils {
@@ -23,7 +22,7 @@ public class LanguageUtils {
             properties.load(ResourceUtils.getLanguageStream(language));
         }
         catch (IOException exception) {
-            System.out.println(Arrays.toString(exception.getStackTrace()));
+            exception.printStackTrace();
         }
     }
 

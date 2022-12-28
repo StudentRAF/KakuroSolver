@@ -73,7 +73,7 @@ public class ActionManager {
      * @return action if exists, otherwise null
      */
     public static KakuroAction getAction(Class actionClass) {
-        String actionName =actionClass.getSimpleName();
+        String actionName = actionClass.getSimpleName();
         for (KakuroAction action : actions)
             if (action.getId().equals(actionName))
                 return action;

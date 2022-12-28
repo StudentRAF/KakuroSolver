@@ -13,7 +13,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class UIManager {
 
@@ -68,7 +67,7 @@ public class UIManager {
             graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, ResourceUtils.getFontStream(Fonts.DIN_MEDIUM)));
         }
         catch(FontFormatException | IOException exception) {
-            System.out.println(Arrays.toString(exception.getStackTrace()));
+            exception.printStackTrace();
         }
     }
 

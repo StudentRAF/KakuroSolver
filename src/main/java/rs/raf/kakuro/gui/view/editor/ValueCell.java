@@ -9,7 +9,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.Map;
 
 public class ValueCell extends CellBase {
 
@@ -32,6 +35,7 @@ public class ValueCell extends CellBase {
         super(row, column);
 
         addFocusListener(new CellFocusListener());
+        addKeyListener(new CellKeyListener());
     }
 
     @Override
@@ -75,6 +79,8 @@ public class ValueCell extends CellBase {
             backgroundColor = BACKGROUND_FOCUS_COLOR;
             foregroundColor = FOREGROUND_FOCUS_COLOR;
 
+            borderThickness = 3;
+
             repaint();
         }
 
@@ -84,7 +90,45 @@ public class ValueCell extends CellBase {
             backgroundColor = BACKGROUND_COLOR;
             foregroundColor = FOREGROUND_COLOR;
 
+            borderThickness = 2;
+
             repaint();
+        }
+
+    }
+
+    private static final Map<Integer, Integer> keyMap = Map.ofEntries(
+            Map.entry( 27, 0), // ESCAPE
+            Map.entry( 48, 0), // 0
+            Map.entry( 49, 1), // 1
+            Map.entry( 50, 2), // 2
+            Map.entry( 51, 3), // 3
+            Map.entry( 52, 4), // 4
+            Map.entry( 53, 5), // 5
+            Map.entry( 54, 6), // 6
+            Map.entry( 55, 7), // 7
+            Map.entry( 56, 8), // 8
+            Map.entry( 57, 9), // 9
+            Map.entry( 96, 0), // NumPad-0
+            Map.entry( 97, 1), // NumPad-1
+            Map.entry( 98, 2), // NumPad-2
+            Map.entry( 99, 3), // NumPad-3
+            Map.entry(100, 4), // NumPad-4
+            Map.entry(101, 5), // NumPad-5
+            Map.entry(102, 6), // NumPad-6
+            Map.entry(103, 7), // NumPad-7
+            Map.entry(104, 8), // NumPad-8
+            Map.entry(105, 9)  // NumPad-9
+                                                                     );
+
+    private class CellKeyListener extends KeyAdapter {
+
+        @Override
+        public void keyPressed(KeyEvent event) {
+            Integer value = keyMap.get(event.getKeyCode());
+
+            if (value != null)
+                setValue(value);
         }
 
     }

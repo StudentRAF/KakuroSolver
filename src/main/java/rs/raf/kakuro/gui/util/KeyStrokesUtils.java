@@ -4,7 +4,6 @@ import rs.raf.kakuro.gui.util.model.KeyStrokes;
 
 import javax.swing.KeyStroke;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class KeyStrokesUtils {
@@ -22,7 +21,7 @@ public class KeyStrokesUtils {
             properties.load(ResourceUtils.getKeyStrokesStream(keyStrokes));
         }
         catch (IOException exception) {
-            System.out.println(Arrays.toString(exception.getStackTrace()));
+            exception.printStackTrace();
         }
     }
 
