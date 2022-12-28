@@ -4,13 +4,14 @@ import rs.raf.kakuro.gui.util.model.KeyStrokes;
 
 import javax.swing.KeyStroke;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class KeyStrokesUtils {
 
     private static final String DEFAULT_VALUE = "NOT_FOUND";
 
-    private static Properties properties = new Properties();
+    private static final Properties properties = new Properties();
 
     /**
      * Loads keystrokes from the resource directory.
@@ -21,7 +22,7 @@ public class KeyStrokesUtils {
             properties.load(ResourceUtils.getKeyStrokesStream(keyStrokes));
         }
         catch (IOException exception) {
-            System.out.println(exception.getStackTrace());
+            System.out.println(Arrays.toString(exception.getStackTrace()));
         }
     }
 

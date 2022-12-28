@@ -1,6 +1,5 @@
 package rs.raf.kakuro.gui.controller.action;
 
-import com.formdev.flatlaf.util.StringUtils;
 import rs.raf.kakuro.gui.util.ImageUtils;
 import rs.raf.kakuro.gui.util.KeyStrokesUtils;
 import rs.raf.kakuro.gui.util.LanguageUtils;
@@ -12,7 +11,7 @@ import javax.swing.KeyStroke;
 
 public abstract class KakuroAction extends AbstractAction {
 
-    private String id;
+    private final String id;
 
     public KakuroAction(Class actionClass) {
         id = actionClass.getSimpleName();

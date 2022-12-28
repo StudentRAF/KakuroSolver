@@ -8,7 +8,6 @@ public class Application {
 
     public static void run() {
         UIManager.setup();
-        ActionManager.setup();
 
         ApplicationWindow.window.setVisible(true);
     }

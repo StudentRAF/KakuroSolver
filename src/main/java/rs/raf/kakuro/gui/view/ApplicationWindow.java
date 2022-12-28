@@ -1,9 +1,10 @@
 package rs.raf.kakuro.gui.view;
 
 import rs.raf.kakuro.gui.util.ImageUtils;
-import rs.raf.kakuro.gui.util.PreferenceUtils;
+import rs.raf.kakuro.gui.view.toolbar.KakuroToolbar;
 
 import javax.swing.JFrame;
+import java.awt.BorderLayout;
 
 public class ApplicationWindow extends JFrame {
 
@@ -25,25 +26,23 @@ public class ApplicationWindow extends JFrame {
     }
 
     private void setup() {
+        setLayout(new BorderLayout());
+
         setTitle("Kakuro");
         setIconImage(ImageUtils.loadImage("Logo"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        setSize(PreferenceUtils.getWindowSize());
-
-        if (PreferenceUtils.getWindowMaximized())
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(1236, 1015);
+        setResizable(false);
 
         setLocationRelativeTo(null);
     }
 
-    private void initializeComponents() {
-
-    }
+    private void initializeComponents() { }
 
     private void addComponents() {
-
+        add(new KakuroToolbar(), BorderLayout.NORTH);
+        add(KakuroEditor.editor, BorderLayout.CENTER);
     }
-
 
 }

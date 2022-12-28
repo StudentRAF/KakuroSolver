@@ -1,5 +1,6 @@
 package rs.raf.kakuro.gui.util;
 
+import rs.raf.kakuro.gui.util.model.Fonts;
 import rs.raf.kakuro.gui.util.model.KeyStrokes;
 import rs.raf.kakuro.gui.util.model.Language;
 
@@ -16,6 +17,8 @@ public class ResourceUtils {
     private static final String imagesRoot    = "images";
     private static final String keyStrokeRoot = "keystrokes";
     private static final String languageRoot  = "languages";
+    private static final String themeRoot     = "themes";
+    private static final String fontRoot      = "fonts";
 
     //region Auxiliary Methods
 
@@ -100,6 +103,38 @@ public class ResourceUtils {
      */
     public static InputStream getLanguageStream(Language language) {
         return getStream(getLanguageResourceDirectory() + language.getId() + propertiesFile);
+    }
+
+    //endregion
+
+    //region Theme Utilities
+
+    /**
+     * Returns the theme directory.
+     * @return theme directory
+     */
+    private static String getThemeResourceDirectory() {
+        return separator + themeRoot + separator;
+    }
+
+    /**
+     * Returns the theme URL.
+     * @return theme URL
+     */
+    public static URL getThemeDirectory() {
+        return getResource(getThemeResourceDirectory());
+    }
+
+    //endregion
+
+    //region Font Utilities
+
+    public static String getFontResourceDirectory() {
+        return separator + fontRoot + separator;
+    }
+
+    public static InputStream getFontStream(Fonts font) {
+        return getStream(getFontResourceDirectory() + font.getName() + font.getFile());
     }
 
     //endregion

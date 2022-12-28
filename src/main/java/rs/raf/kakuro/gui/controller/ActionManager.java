@@ -1,14 +1,20 @@
 package rs.raf.kakuro.gui.controller;
 
-import com.formdev.flatlaf.util.StringUtils;
+import rs.raf.kakuro.gui.controller.action.EditCellAction;
+import rs.raf.kakuro.gui.controller.action.EditStateAction;
 import rs.raf.kakuro.gui.controller.action.KakuroAction;
+import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
+import rs.raf.kakuro.gui.controller.action.SwitchStateAction;
 
 import java.util.List;
 
 public class ActionManager {
 
     private static final List<KakuroAction> actions = List.of(
-
+            new EditCellAction(),
+            new EditStateAction(),
+            new SwitchCellAction(),
+            new SwitchStateAction()
                                                              );
 
     //region Setup
@@ -67,7 +73,7 @@ public class ActionManager {
      * @return action if exists, otherwise null
      */
     public static KakuroAction getAction(Class actionClass) {
-        String actionName = StringUtils.removeTrailing(actionClass.getSimpleName(), "Action");
+        String actionName =actionClass.getSimpleName();
         for (KakuroAction action : actions)
             if (action.getId().equals(actionName))
                 return action;

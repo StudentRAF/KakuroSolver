@@ -3,6 +3,7 @@ package rs.raf.kakuro.gui.util;
 import rs.raf.kakuro.gui.util.model.Language;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class LanguageUtils {
@@ -11,7 +12,7 @@ public class LanguageUtils {
     private static final String DISPLAY_NAME  = ".name";
     private static final String TOOLTIP       = ".tooltip";
 
-    private static Properties properties = new Properties();
+    private static final Properties properties = new Properties();
 
     /**
      * Loads language from the resource directory.
@@ -22,7 +23,7 @@ public class LanguageUtils {
             properties.load(ResourceUtils.getLanguageStream(language));
         }
         catch (IOException exception) {
-            System.out.println(exception.getStackTrace());
+            System.out.println(Arrays.toString(exception.getStackTrace()));
         }
     }
 
