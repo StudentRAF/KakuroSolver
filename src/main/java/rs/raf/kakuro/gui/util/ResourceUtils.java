@@ -37,9 +37,7 @@ public class ResourceUtils {
      * @return resource stream
      */
     private static InputStream getStream(String resource) {
-        InputStream inputStream = ResourceUtils.class.getResourceAsStream(resource);
-
-        return inputStream;
+        return ResourceUtils.class.getResourceAsStream(resource);
     }
 
     //endregion
@@ -56,7 +54,7 @@ public class ResourceUtils {
 
     /**
      * Returns the image path.
-     * @param iconName image name
+     * @param imageName image name
      * @return image path
      */
     public static URL getImagePath(String imageName) {

@@ -37,9 +37,9 @@ public class Editor extends JPanel {
     }
 
     private void setup() {
-        setLayout(new GridLayout(rows, columns, 3, 3));
+        setLayout(new GridLayout(rows, columns, 2, 2));
 
-        setBorder(BorderFactory.createLineBorder(new Color(55, 57, 59), 4));
+        setBorder(BorderFactory.createLineBorder(new Color(55, 57, 59), 3));
         setBackground(new Color(110, 112, 114));
     }
 

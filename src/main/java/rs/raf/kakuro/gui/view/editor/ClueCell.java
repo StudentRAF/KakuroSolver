@@ -56,55 +56,86 @@ public class ClueCell extends CellBase {
 
     @Override
     protected void paintCell(Graphics2D graphics) {
-        Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 28);
-
-        graphics.setColor(borderColor);
-        graphics.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
-
-        graphics.setColor(backgroundColor);
-        graphics.fill(new Rectangle2D.Double(borderThickness,                  borderThickness,
-                                             getWidth() - 2 * borderThickness, getHeight() - 2 * borderThickness));
-
-        graphics.setFont(font);
-
-        graphics.setColor(foregroundColor);
-
-        Point topRight   = getTopRightLocation(font);
-        Point bottomLeft = getBottomLeftLocation(font);
+        paintCellBorder(graphics);
+        paintCellBackground(graphics);
 
         if (rightClue > 0)
-            graphics.drawString(Integer.toString(rightClue), topRight.x, topRight.y);
+            paintCellRightClue(graphics);
 
         if (bottomClue > 0)
-            graphics.drawString(Integer.toString(bottomClue), bottomLeft.x, bottomLeft.y);
+            paintCellBottomClue(graphics);
 
         graphics.setStroke(new BasicStroke(selectionThickness));
 
-        if (!activeRight && !activeLeft) {
-            graphics.setColor(foregroundColor);
-            graphics.setStroke(new BasicStroke(diagonalThickness));
-            graphics.draw(new Line2D.Double(15, 15, getWidth() - 16, getHeight() - 16));
-        }
-        else {
-            graphics.setColor(selectionColor);
-            graphics.setStroke(new BasicStroke(selectionThickness));
-
-            if (activeRight)
-                graphics.draw(getTopRightPath());
-            else
-                graphics.draw(getBottomLeftPath());
-
-        }
+        if (!activeRight && !activeLeft)
+            paintCellClueDivider(graphics);
+        else
+            paintCellSelection(graphics);
     }
 
-    private Point getTopRightLocation(Font font) {
+    //region Paint Cell
+
+    private void paintCellBorder(Graphics2D graphics) {
+        graphics.setColor(borderColor);
+        graphics.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
+    }
+
+    private void paintCellBackground(Graphics2D graphics) {
+        graphics.setColor(backgroundColor);
+        graphics.fill(new Rectangle2D.Double(borderThickness, borderThickness, getWidth() - 2 * borderThickness, getHeight() - 2 * borderThickness));
+    }
+
+    private void paintCellRightClue(Graphics2D graphics) {
+        Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 28);
+
+        graphics.setFont(font);
+        graphics.setColor(foregroundColor);
+
+        Point right = getRightLocation(font);
+
+        graphics.drawString(Integer.toString(rightClue), right.x, right.y);
+    }
+
+    private Point getRightLocation(Font font) {
         FontMetrics metrics = new Canvas().getFontMetrics(font);
         return new Point(60 - metrics.stringWidth(Integer.toString(rightClue)) / 2, 37);
     }
 
-    private Point getBottomLeftLocation(Font font) {
+    private void paintCellBottomClue(Graphics2D graphics) {
+        Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 28);
+
+        graphics.setFont(font);
+        graphics.setColor(foregroundColor);
+
+        Point bottom = getBottomLocation(font);
+
+        graphics.drawString(Integer.toString(bottomClue), bottom.x, bottom.y);
+    }
+
+    private Point getBottomLocation(Font font) {
         FontMetrics metrics = new Canvas().getFontMetrics(font);
         return new Point(28 - metrics.stringWidth(Integer.toString(bottomClue)) / 2, 73);
+    }
+
+    private void paintCellClueDivider(Graphics2D graphics) {
+        graphics.setColor(foregroundColor);
+        graphics.setStroke(new BasicStroke(diagonalThickness));
+
+        graphics.draw(new Line2D.Double(getWidth() / 6, getHeight() / 6, 5 * getWidth() / 6 - 1, 5 * getHeight() / 6 - 1));
+    }
+
+    private void paintCellSelection(Graphics2D graphics) {
+        if (activeRight)
+            paintCellTopRightSelection(graphics);
+        else
+            paintCellBottomLeftSelection(graphics);
+    }
+
+    private void paintCellTopRightSelection(Graphics2D graphics) {
+        graphics.setColor(selectionColor);
+        graphics.setStroke(new BasicStroke(selectionThickness));
+
+        graphics.draw(getTopRightPath());
     }
 
     private Path2D getTopRightPath() {
@@ -118,6 +149,13 @@ public class ClueCell extends CellBase {
         return path;
     }
 
+    private void paintCellBottomLeftSelection(Graphics2D graphics) {
+        graphics.setColor(selectionColor);
+        graphics.setStroke(new BasicStroke(selectionThickness));
+
+        graphics.draw(getBottomLeftPath());
+    }
+
     private Path2D getBottomLeftPath() {
         Path2D path = new Path2D.Double();
 
@@ -128,6 +166,8 @@ public class ClueCell extends CellBase {
 
         return path;
     }
+
+    //endregion
 
     @Override
     public CellBase getSuccessor() {

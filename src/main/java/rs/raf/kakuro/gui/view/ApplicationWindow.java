@@ -32,7 +32,7 @@ public class ApplicationWindow extends JFrame {
         setIconImage(ImageUtils.loadImage("Logo"));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        setSize(1236, 1015);
+        setSize(1220, 1002);
         setResizable(false);
 
         setLocationRelativeTo(null);

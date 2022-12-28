@@ -14,12 +14,11 @@ import java.awt.Color;
 
 public class Toolbar extends JToolBar {
 
-    private final ButtonGroup group = new ButtonGroup();
-
     public Toolbar() {
         setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(47, 49, 51)),
                                                      BorderFactory.createEmptyBorder(1, 3, 1, 3)));
 
+        ButtonGroup group = new ButtonGroup();
         group.add((AbstractButton) add(new JToggleButton(ActionManager.getAction(SwitchStateAction.class))));
         group.add((AbstractButton) add(new JToggleButton(ActionManager.getAction(EditStateAction.class))));
 

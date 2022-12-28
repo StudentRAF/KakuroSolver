@@ -11,7 +11,7 @@ import java.awt.geom.Rectangle2D;
 public class EmptyCell extends CellBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
-    private static final Color BACKGROUND_COLOR       = ColorFunctions.darken(BASE_BACKGROUND_COLOR, 0.01f);
+    private static final Color BACKGROUND_COLOR       = ColorFunctions.darken(BASE_BACKGROUND_COLOR, 0.03f);
     private static final Color BORDER_FOCUS_COLOR     = BORDER_COLOR;
     private static final Color BACKGROUND_FOCUS_COLOR = BACKGROUND_COLOR;
 
@@ -28,12 +28,18 @@ public class EmptyCell extends CellBase {
 
     @Override
     protected void paintCell(Graphics2D graphics) {
+        paintCellBorder(graphics);
+        paintCellBackground(graphics);
+    }
+
+    private void paintCellBorder(Graphics2D graphics) {
         graphics.setColor(borderColor);
         graphics.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
+    }
 
+    private void paintCellBackground(Graphics2D graphics) {
         graphics.setColor(backgroundColor);
-        graphics.fill(new Rectangle2D.Double(borderThickness,                  borderThickness,
-                                             getWidth() - 2 * borderThickness, getHeight() - 2 * borderThickness));
+        graphics.fill(new Rectangle2D.Double(borderThickness, borderThickness, getWidth() - 2 * borderThickness, getHeight() - 2 * borderThickness));
     }
 
     @Override
