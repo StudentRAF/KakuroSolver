@@ -5,13 +5,16 @@ import com.formdev.flatlaf.util.ColorFunctions;
 import rs.raf.kakuro.gui.controller.ActionManager;
 import rs.raf.kakuro.gui.controller.action.EditCellAction;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
-import rs.raf.kakuro.gui.model.CellBase;
+import rs.raf.kakuro.gui.model.cell.CellBase;
+import rs.raf.kakuro.gui.view.Editor;
 
 import javax.swing.Action;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public abstract class EditorCellBase extends FlatButton {
 
@@ -35,6 +38,8 @@ public abstract class EditorCellBase extends FlatButton {
         setBorderPainted(false);
 
         setAction(currentAction);
+
+        addKeyListener(new BaseCellKeyListener());
     }
 
     @Override
@@ -70,6 +75,22 @@ public abstract class EditorCellBase extends FlatButton {
 
     public int getColumn() {
         return column;
+    }
+
+    private class BaseCellKeyListener extends KeyAdapter {
+
+        @Override
+        public void keyPressed(KeyEvent event) {
+            int code = event.getKeyCode();
+
+            if (code < 37 || code > 40)
+                return;
+
+            Editor.instance.setEditorCellFocused(Math.min(Math.max(row + (event.getKeyCode() - 39) % 2, 0), Editor.rows - 1),
+                                                 Math.min(Math.max(column + (event.getKeyCode() - 38) % 2, 0), Editor.columns - 1));
+
+        }
+
     }
 
 }

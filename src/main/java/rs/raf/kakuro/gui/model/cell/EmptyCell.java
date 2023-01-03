@@ -1,4 +1,4 @@
-package rs.raf.kakuro.gui.model;
+package rs.raf.kakuro.gui.model.cell;
 
 public class EmptyCell extends CellBase {
 

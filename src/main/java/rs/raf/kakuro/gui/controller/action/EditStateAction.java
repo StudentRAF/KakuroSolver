@@ -12,7 +12,7 @@ public class EditStateAction extends KakuroAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        Editor.editor.setEditState();
+        Editor.instance.setEditState();
     }
 
 }

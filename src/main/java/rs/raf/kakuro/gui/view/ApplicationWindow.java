@@ -30,7 +30,7 @@ public class ApplicationWindow extends JFrame {
 
         setTitle("Kakuro");
         setIconImage(ImageUtils.loadImage("Logo"));
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setSize(1220, 1002);
         setResizable(false);
@@ -42,7 +42,7 @@ public class ApplicationWindow extends JFrame {
 
     private void addComponents() {
         add(new Toolbar(), BorderLayout.NORTH);
-        add(Editor.editor, BorderLayout.CENTER);
+        add(Editor.instance, BorderLayout.CENTER);
     }
 
 }

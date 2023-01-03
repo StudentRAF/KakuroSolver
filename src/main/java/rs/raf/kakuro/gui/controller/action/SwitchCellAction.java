@@ -15,7 +15,7 @@ public class SwitchCellAction extends KakuroAction {
     public void actionPerformed(ActionEvent event) {
         EditorCellBase cell = (EditorCellBase) event.getSource();
 
-        Editor.editor.changeToSuccessor(cell.getRow(), cell.getColumn());
+        Editor.instance.changeToSuccessor(cell.getRow(), cell.getColumn());
     }
 
 }

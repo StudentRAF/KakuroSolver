@@ -12,7 +12,7 @@ public class SwitchStateAction extends KakuroAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        Editor.editor.setSwitchState();
+        Editor.instance.setSwitchState();
     }
 
 }

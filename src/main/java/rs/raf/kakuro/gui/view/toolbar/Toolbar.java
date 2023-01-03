@@ -2,6 +2,10 @@ package rs.raf.kakuro.gui.view.toolbar;
 
 import rs.raf.kakuro.gui.controller.ActionManager;
 import rs.raf.kakuro.gui.controller.action.EditStateAction;
+import rs.raf.kakuro.gui.controller.action.Number0Action;
+import rs.raf.kakuro.gui.controller.action.Number1Action;
+import rs.raf.kakuro.gui.controller.action.Number2Action;
+import rs.raf.kakuro.gui.controller.action.SolveAction;
 import rs.raf.kakuro.gui.controller.action.SwitchStateAction;
 import rs.raf.kakuro.gui.view.Editor;
 
@@ -19,11 +23,22 @@ public class Toolbar extends JToolBar {
                                                      BorderFactory.createEmptyBorder(1, 3, 1, 3)));
 
         ButtonGroup group = new ButtonGroup();
+
         group.add((AbstractButton) add(new JToggleButton(ActionManager.getAction(SwitchStateAction.class))));
         group.add((AbstractButton) add(new JToggleButton(ActionManager.getAction(EditStateAction.class))));
 
+        addSeparator();
+
+        add(ActionManager.getAction(SolveAction.class));
+
+        addSeparator();
+
+        add(ActionManager.getAction(Number0Action.class));
+        add(ActionManager.getAction(Number1Action.class));
+        add(ActionManager.getAction(Number2Action.class));
+
         group.setSelected(group.getElements().nextElement().getModel(), true);
-        Editor.editor.setSwitchState();
+        Editor.instance.setSwitchState();
     }
 
 }

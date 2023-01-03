@@ -1,8 +1,9 @@
 package rs.raf.kakuro.gui.view.editor;
 
 import com.formdev.flatlaf.util.ColorFunctions;
-import rs.raf.kakuro.gui.model.CellBase;
-import rs.raf.kakuro.gui.model.EmptyCell;
+import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
+import rs.raf.kakuro.gui.model.cell.CellBase;
+import rs.raf.kakuro.gui.model.cell.EmptyCell;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -13,9 +14,9 @@ import java.awt.geom.Rectangle2D;
 public class EditorEmptyCell extends EditorCellBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
-    private static final Color BACKGROUND_COLOR       = ColorFunctions.darken(BASE_BACKGROUND_COLOR, 0.03f);
-    private static final Color BORDER_FOCUS_COLOR     = BORDER_COLOR;
-    private static final Color BACKGROUND_FOCUS_COLOR = BACKGROUND_COLOR;
+    private static final Color BACKGROUND_COLOR       = ColorFunctions.darken(BASE_BACKGROUND_COLOR, 0.023f);
+    private static final Color BORDER_FOCUS_COLOR     = BASE_BORDER_FOCUS_COLOR;
+    private static final Color BACKGROUND_FOCUS_COLOR = ColorFunctions.lighten(BACKGROUND_COLOR, 0);
 
     private Color borderColor     = BORDER_COLOR;
     private Color backgroundColor = BACKGROUND_COLOR;
@@ -67,8 +68,13 @@ public class EditorEmptyCell extends EditorCellBase {
 
         @Override
         public void focusGained(FocusEvent event) {
+            if (currentAction instanceof SwitchCellAction)
+                return;
+
             borderColor     = BORDER_FOCUS_COLOR;
             backgroundColor = BACKGROUND_FOCUS_COLOR;
+
+            borderThickness = 3;
 
             repaint();
         }
@@ -77,6 +83,8 @@ public class EditorEmptyCell extends EditorCellBase {
         public void focusLost(FocusEvent event) {
             borderColor     = BORDER_COLOR;
             backgroundColor = BACKGROUND_COLOR;
+
+            borderThickness = 2;
 
             repaint();
         }

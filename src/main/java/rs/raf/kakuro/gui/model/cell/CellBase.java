@@ -1,4 +1,4 @@
-package rs.raf.kakuro.gui.model;
+package rs.raf.kakuro.gui.model.cell;
 
 public abstract class CellBase {
 
@@ -16,6 +16,14 @@ public abstract class CellBase {
 
     public int getColumn() {
         return column;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CellBase cellBase))
+            return false;
+
+        return getRow() == cellBase.getRow() && getColumn() == cellBase.getColumn();
     }
 
 }

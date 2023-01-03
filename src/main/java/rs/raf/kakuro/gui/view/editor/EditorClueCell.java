@@ -2,8 +2,8 @@ package rs.raf.kakuro.gui.view.editor;
 
 import com.formdev.flatlaf.util.ColorFunctions;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
-import rs.raf.kakuro.gui.model.CellBase;
-import rs.raf.kakuro.gui.model.ClueCell;
+import rs.raf.kakuro.gui.model.cell.CellBase;
+import rs.raf.kakuro.gui.model.cell.ClueCell;
 import rs.raf.kakuro.gui.util.model.Fonts;
 
 import java.awt.BasicStroke;
@@ -42,8 +42,8 @@ public class EditorClueCell extends EditorCellBase {
     private int selectionThickness = 3;
     private int diagonalThickness  = 2;
 
-    private boolean activeRight = false;
-    private boolean activeLeft  = false;
+    private boolean activeRight  = false;
+    private boolean activeBottom = false;
 
     private final ClueCell cell;
 
@@ -61,19 +61,10 @@ public class EditorClueCell extends EditorCellBase {
     protected void paintCell(Graphics2D graphics) {
         paintCellBorder(graphics);
         paintCellBackground(graphics);
-
-        if (cell.getRightClue() > 0)
-            paintCellRightClue(graphics);
-
-        if (cell.getBottomClue() > 0)
-            paintCellBottomClue(graphics);
-
-        graphics.setStroke(new BasicStroke(selectionThickness));
-
-        if (!activeRight && !activeLeft)
-            paintCellClueDivider(graphics);
-        else
-            paintCellSelection(graphics);
+        paintCellRightClue(graphics);
+        paintCellBottomClue(graphics);
+        paintCellClueDivider(graphics);
+        paintCellSelection(graphics);
     }
 
     //region Paint Cell
@@ -89,6 +80,9 @@ public class EditorClueCell extends EditorCellBase {
     }
 
     private void paintCellRightClue(Graphics2D graphics) {
+        if (cell.getRightClue() == 0)
+            return;
+
         Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 28);
 
         graphics.setFont(font);
@@ -105,6 +99,9 @@ public class EditorClueCell extends EditorCellBase {
     }
 
     private void paintCellBottomClue(Graphics2D graphics) {
+        if (cell.getBottomClue() == 0)
+            return;
+
         Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 28);
 
         graphics.setFont(font);
@@ -121,6 +118,9 @@ public class EditorClueCell extends EditorCellBase {
     }
 
     private void paintCellClueDivider(Graphics2D graphics) {
+        if (activeRight || activeBottom)
+            return;
+
         graphics.setColor(foregroundColor);
         graphics.setStroke(new BasicStroke(diagonalThickness));
 
@@ -130,7 +130,7 @@ public class EditorClueCell extends EditorCellBase {
     private void paintCellSelection(Graphics2D graphics) {
         if (activeRight)
             paintCellTopRightSelection(graphics);
-        else
+        else if (activeBottom)
             paintCellBottomLeftSelection(graphics);
     }
 
@@ -196,6 +196,11 @@ public class EditorClueCell extends EditorCellBase {
             if (currentAction instanceof SwitchCellAction)
                 return;
 
+            if (!activeRight && !activeBottom) {
+                borderColor     = BORDER_FOCUS_COLOR;
+                borderThickness = 3;
+            }
+
             selectionColor  = BORDER_FOCUS_COLOR;
             backgroundColor = BACKGROUND_FOCUS_COLOR;
             foregroundColor = FOREGROUND_FOCUS_COLOR;
@@ -206,11 +211,14 @@ public class EditorClueCell extends EditorCellBase {
 
         @Override
         public void focusLost(FocusEvent event) {
+            borderColor     = BORDER_COLOR;
             selectionColor  = BORDER_COLOR;
             backgroundColor = BACKGROUND_COLOR;
             foregroundColor = FOREGROUND_COLOR;
 
-            activeLeft = activeRight = false;
+            borderThickness = 2;
+
+            activeBottom = activeRight = false;
 
             repaint();
         }
@@ -261,7 +269,9 @@ public class EditorClueCell extends EditorCellBase {
             if (currentAction instanceof SwitchCellAction)
                 return;
 
-            activeRight = !(activeLeft = getBottomLeftShape().contains(event.getPoint()));
+            borderColor = BORDER_COLOR;
+
+            activeRight = !(activeBottom = getBottomLeftShape().contains(event.getPoint()));
         }
 
         private Path2D getBottomLeftShape() {
@@ -284,7 +294,7 @@ public class EditorClueCell extends EditorCellBase {
     private void addToActiveValue(int value) {
         if (activeRight)
             addToRightClue(value);
-        else
+        else if (activeBottom)
             addToBottomClue(value);
     }
 

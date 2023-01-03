@@ -2,8 +2,8 @@ package rs.raf.kakuro.gui.view.editor;
 
 import com.formdev.flatlaf.util.ColorFunctions;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
-import rs.raf.kakuro.gui.model.CellBase;
-import rs.raf.kakuro.gui.model.ValueCell;
+import rs.raf.kakuro.gui.model.cell.CellBase;
+import rs.raf.kakuro.gui.model.cell.ValueCell;
 import rs.raf.kakuro.gui.util.model.Fonts;
 
 import java.awt.Color;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class EditorValueCell extends EditorCellBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
-    private static final Color BACKGROUND_COLOR       = ColorFunctions.lighten(BASE_BACKGROUND_COLOR, 0.01f);
+    private static final Color BACKGROUND_COLOR       = ColorFunctions.lighten(BASE_BACKGROUND_COLOR, 0.03f);
     private static final Color FOREGROUND_COLOR       = ColorFunctions.lighten(BASE_FOREGROUND_COLOR, 0.1f);
     private static final Color BORDER_FOCUS_COLOR     = BASE_BORDER_FOCUS_COLOR;
     private static final Color BACKGROUND_FOCUS_COLOR = ColorFunctions.lighten(BACKGROUND_COLOR, 0.01f);
@@ -50,7 +50,7 @@ public class EditorValueCell extends EditorCellBase {
 
         if (cell.getValue() > 0)
             paintCellValue(graphics);
-        else
+        else if (cell.getNotes().activeCount() > 0)
             paintCellNotes(graphics);
     }
 
@@ -79,8 +79,8 @@ public class EditorValueCell extends EditorCellBase {
     }
 
     private void paintCellNotes(Graphics2D graphics) {
-        for (int index = 0; index < cell.getNotes().length; ++index)
-            if (cell.getNotes()[index])
+        for (int index = 0; index < cell.getNotes().size(); ++index)
+            if (cell.getNotes().get(index))
                 paintCellNote(graphics, index);
     }
 
@@ -176,22 +176,41 @@ public class EditorValueCell extends EditorCellBase {
         public void keyPressed(KeyEvent event) {
             Integer value = keyMap.get(event.getKeyCode());
 
-            if (value != null)
+            if (value == null)
+                return;
+
+            if (event.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK)
+                if (value == 0)
+                    resetNotes();
+                else
+                    reverseNote(value - 1);
+            else
                 setValue(value);
         }
 
     }
 
+
+
     //endregion
 
     //region Setters and Getters
-
     /**
      * Sets the cell value.
      * @param value value
      */
     public void setValue(int value) {
         cell.setValue(value);
+        repaint();
+    }
+
+    public void reverseNote(int index) {
+        cell.getNotes().reverse(index);
+        repaint();
+    }
+
+    private void resetNotes() {
+        cell.getNotes().set(new boolean[] { false, false, false, false, false, false, false, false, false });
         repaint();
     }
 
