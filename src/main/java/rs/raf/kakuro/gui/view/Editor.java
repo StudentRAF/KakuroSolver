@@ -51,7 +51,7 @@ public class Editor extends JPanel {
             for (int column = 0; column < columns; ++column)
                 editorCells[row][column] = new EditorEmptyCell(row, column);
 
-        example3();
+        example2();
     }
 
     private void example1() {

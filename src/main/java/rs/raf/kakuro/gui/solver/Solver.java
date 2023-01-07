@@ -1,80 +1,101 @@
 package rs.raf.kakuro.gui.solver;
 
+import rs.raf.kakuro.gui.controller.StepManager;
+import rs.raf.kakuro.gui.controller.steps.AssignmentClueCellStep;
+import rs.raf.kakuro.gui.controller.steps.AssignmentEmptyCellStep;
+import rs.raf.kakuro.gui.controller.steps.AssignmentValueCellStep;
+import rs.raf.kakuro.gui.controller.steps.TableBoundsStep;
 import rs.raf.kakuro.gui.model.cell.CellBase;
 import rs.raf.kakuro.gui.model.cell.ClueCell;
 import rs.raf.kakuro.gui.model.cell.EmptyCell;
 import rs.raf.kakuro.gui.model.cell.ValueCell;
+import rs.raf.kakuro.gui.model.data.Bounds;
+import rs.raf.kakuro.gui.model.data.Table;
 import rs.raf.kakuro.gui.view.Editor;
 
 public class Solver {
 
-    private static int startRow;
-    private static int startColumn;
-    private static int endRow;
-    private static int endColumn;
+    private static Editor editor = Editor.instance;
 
-    private static CellBase[][] cells;
-    private static CellBase[][] kakuro;
+    private static Table editorTable;
+    private static Table kakuroTable;
 
     public static void initialize() {
         clear();
 
-        initializeEditorTable();
-        initializeKakuroTable();
-        initializeKakuroCells();
+        initializeTableBounds();
+        initializeTableCells();
+        initializeTableData();
 
         updateEditorValues();
     }
 
-    private static void initializeEditorTable() {
-        cells = Editor.instance.getCells();
+    private static void initializeTableBounds() {
+        editorTable = new Table(editor.getCells());
+        kakuroTable = new Table();
 
-        for (int row = 0; row < cells.length; ++row)
-            for (int column = 0; column < cells[row].length; ++column) {
-                if (cells[row][column] instanceof EmptyCell)
+        Bounds bounds = new Bounds();
+
+        for (int row = 0; row < editorTable.getHeight(); ++row)
+            for (int column = 0; column < editorTable.getWidth(); ++column) {
+                if (editorTable.getCell(row, column) instanceof EmptyCell)
                     continue;
 
-                startRow    = Math.min(startRow,    row   );
-                endRow      = Math.max(endRow,      row   );
-                startColumn = Math.min(startColumn, column);
-                endColumn   = Math.max(endColumn,   column);
+                bounds.updateStartRow(row);
+                bounds.updateEndRow(row);
+                bounds.updateStartColumn(column);
+                bounds.updateEndColumn(column);
              }
+
+        kakuroTable.setBounds(bounds);
+
+        StepManager.addStep(new TableBoundsStep(kakuroTable.getBounds()));
     }
 
-    public static void initializeKakuroTable() {
-        if (startRow > endRow)
+    public static void initializeTableCells() {
+        if (!kakuroTable.isValid())
             return;
 
-        kakuro = new CellBase[endRow - startRow + 1][endColumn - startColumn + 1];
+        for (int row = 0; row < kakuroTable.getHeight(); ++row)
+            for (int column = 0; column < kakuroTable.getWidth(); ++column) {
+                CellBase editorCell = editorTable.getCell(row, column, kakuroTable.getBounds());
+                if (editorCell instanceof ValueCell) {
+                    ValueCell cell = new ValueCell(row, column);
 
-        for (int row = 0; row < kakuro.length; ++row)
-            for (int column = 0; column < kakuro[row].length; ++column) {
-                if (cells[row + startRow][column + startColumn] instanceof ValueCell)
-                    kakuro[row][column] = new ValueCell(row, column);
-                else if (cells[row + startRow][column + startColumn] instanceof ClueCell clueCell) {
+                    kakuroTable.setCell(cell);
+
+                    StepManager.addStep(new AssignmentValueCellStep(cell));
+                }
+                else if (editorCell instanceof ClueCell clueCell) {
                     ClueCell cell = new ClueCell(row, column);
 
                     cell.setRightClue(clueCell.getRightClue());
                     cell.setBottomClue(clueCell.getBottomClue());
 
-                    kakuro[row][column] = cell;
-                }
-                else if (cells[row + startRow][column + startColumn] instanceof EmptyCell)
-                    kakuro[row][column] = new EmptyCell(row, column);
+                    kakuroTable.setCell(cell);
 
+                    StepManager.addStep(new AssignmentClueCellStep(cell));
+                }
+                else {
+                    EmptyCell cell = new EmptyCell(row, column);
+
+                    kakuroTable.setCell(cell);
+
+                    StepManager.addStep(new AssignmentEmptyCellStep(cell));
+                }
             }
     }
 
-    public static void initializeKakuroCells() {
-        for (int row = 0; row < kakuro.length; ++row)
-            for (int column = 0; column < kakuro[row].length; ++ column) {
-                if (!(kakuro[row][column] instanceof ClueCell clueCell))
+    public static void initializeTableData() {
+        for (int row = 0; row < kakuroTable.getHeight(); ++row)
+            for (int column = 0; column < kakuroTable.getWidth(); ++ column) {
+                if (!(kakuroTable.getCell(row, column) instanceof ClueCell clueCell))
                     continue;
 
                 if (clueCell.getRightClue() != 0) {
                     int clueColumn = column;
 
-                    while (++clueColumn < kakuro[row].length && (kakuro[row][clueColumn] instanceof ValueCell valueCell)) {
+                    while (++clueColumn < kakuroTable.getWidth() && (kakuroTable.getCell(row, clueColumn) instanceof ValueCell valueCell)) {
                         clueCell.addRightValueCell(valueCell);
                         valueCell.setLeftClue(clueCell);
                     }
@@ -85,7 +106,7 @@ public class Solver {
                 if (clueCell.getBottomClue() != 0) {
                     int clueRow = row;
 
-                    while (++clueRow < kakuro.length && (kakuro[clueRow][column] instanceof ValueCell valueCell)) {
+                    while (++clueRow < kakuroTable.getHeight() && (kakuroTable.getCell(clueRow, column) instanceof ValueCell valueCell)) {
                         clueCell.addBottomValueCell(valueCell);
                         valueCell.setTopClue(clueCell);
                     }
@@ -96,9 +117,9 @@ public class Solver {
     }
 
     public static void removeExcessCellNotes() {
-        for (int row = 0; row < kakuro.length; ++row)
-            for (int column = 0; column < kakuro[row].length; ++ column) {
-                if (!(kakuro[row][column] instanceof ClueCell clueCell))
+        for (int row = 0; row < kakuroTable.getHeight(); ++row)
+            for (int column = 0; column < kakuroTable.getWidth(); ++ column) {
+                if (!(kakuroTable.getCell(row, column) instanceof ClueCell clueCell))
                     continue;
 
                 clueCell.removeExcess();
@@ -108,10 +129,10 @@ public class Solver {
     }
 
     public static void updateEditorValues() {
-        for (int row = 0; row < kakuro.length; ++row)
-            for (int column = 0; column < kakuro[row].length; ++column) {
-                if (kakuro[row][column] instanceof ValueCell kakuroValueCell) {
-                    ValueCell editorValueCell = (ValueCell) cells[startRow + row][startColumn + column];
+        for (int row = 0; row < kakuroTable.getHeight(); ++row)
+            for (int column = 0; column < kakuroTable.getWidth(); ++column) {
+                if (kakuroTable.getCell(row, column) instanceof ValueCell kakuroValueCell) {
+                    ValueCell editorValueCell = (ValueCell) editorTable.getCell(row, column, kakuroTable.getBounds());
                     editorValueCell.getNotes().set(kakuroValueCell.getNotes().getValues());
                     editorValueCell.setValue(kakuroValueCell.getValue());
                 }
@@ -121,12 +142,8 @@ public class Solver {
     }
 
     public static void clear() {
-        startRow    = Editor.rows;
-        startColumn = Editor.columns;
-        endRow      = 0;
-        endColumn   = 0;
-
-        cells = null;
+        kakuroTable = null;
+        editorTable = null;
     }
 
 }

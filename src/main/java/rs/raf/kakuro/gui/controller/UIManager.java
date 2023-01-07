@@ -61,13 +61,15 @@ public class UIManager {
      * Setups the fonts;
      */
     private static void setupFonts() {
-        try {
-            GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, ResourceUtils.getFontStream(Fonts.DIN)));
-            graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, ResourceUtils.getFontStream(Fonts.DIN_MEDIUM)));
-        }
-        catch(FontFormatException | IOException exception) {
-            exception.printStackTrace();
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+        for (Fonts font : Fonts.values()) {
+            try {
+                graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, ResourceUtils.getFontStream(font)));
+            }
+            catch (FontFormatException | IOException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 

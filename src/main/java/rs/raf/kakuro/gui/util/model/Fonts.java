@@ -1,8 +1,17 @@
 package rs.raf.kakuro.gui.util.model;
 
 public enum Fonts {
-    DIN       ("DIN"       , ".ttf"),
-    DIN_MEDIUM("DIN Medium", ".ttf");
+
+    DIN_REGULAR("DIN Regular", ".ttf"),
+    DIN_MEDIUM ("DIN Medium",  ".ttf"),
+    DIN_BOLD   ("DIN Bold"  ,  ".ttf"),
+
+    MONTSERRAT_REGULAR  ("Montserrat Regular",  ".ttf"),
+    MONTSERRAT_MEDIUM   ("Montserrat Medium",   ".ttf"),
+    MONTSERRAT_SEMI_BOLD("Montserrat SemiBold", ".ttf"),
+    MONTSERRAT_BOLD     ("Montserrat Bold",     ".ttf"),
+
+    ROBOTO_MEDIUM ("Roboto Medium", ".ttf");
 
     private final String name;
     private final String file;

@@ -1,6 +1,6 @@
 package rs.raf.kakuro.gui.controller.action;
 
-import rs.raf.kakuro.gui.view.solution.Solution;
+import rs.raf.kakuro.gui.view.solution.SolutionWindow;
 
 import java.awt.event.ActionEvent;
 
@@ -12,7 +12,7 @@ public class SolveAction extends KakuroAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        Solution.window.setVisible(true);
+        SolutionWindow.window.setVisible(true);
     }
 
 }
