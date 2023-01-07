@@ -135,15 +135,16 @@ public class TableBoundsRenderer extends RendererBase {
         graphics.setFont(FONT_CONTENT);
         graphics.setColor(isSelected ? FOREGROUND_FOCUS_COLOR : FOREGROUND_COLOR);
 
-        int maxWidth = Math.max(Math.max(contentMetrics.stringWidth(contentTopLeft),  contentMetrics.stringWidth(contentBottomLeft)),
-                                Math.max(contentMetrics.stringWidth(contentTopRight), contentMetrics.stringWidth(contentBottomRight)));
+        int maxLeftWidth  = Math.max(contentMetrics.stringWidth(contentTopLeft),  contentMetrics.stringWidth(contentBottomLeft));
+        int maxRightWidth = Math.max(contentMetrics.stringWidth(contentTopRight), contentMetrics.stringWidth(contentBottomRight));
+        int maxWidth      = Math.max(maxLeftWidth, maxRightWidth);
 
-        int contentX = (getWidth() - SPACING_HORIZONTAL) / 2 - maxWidth;
+        int contentX = (getWidth() - SPACING_HORIZONTAL - maxWidth - maxLeftWidth) / 2;
         int contentY = (int) (COMPONENT_PADDING + titleBounds.getHeight() + titleMetrics.getDescent() + SEPARATOR_THICKNESS + SPACING_VERTICAL + contentBounds.getHeight());
 
         graphics.drawString(contentTopLeft, contentX, contentY);
 
-        contentX = (getWidth() + SPACING_HORIZONTAL) / 2;
+        contentX = (getWidth() + SPACING_HORIZONTAL + maxWidth - maxRightWidth) / 2;
 
         graphics.drawString(contentTopRight, contentX, contentY);
 
@@ -151,7 +152,7 @@ public class TableBoundsRenderer extends RendererBase {
 
         graphics.drawString(contentBottomRight, contentX, contentY);
 
-        contentX = (getWidth() - SPACING_HORIZONTAL) / 2 - maxWidth;
+        contentX = (getWidth() - SPACING_HORIZONTAL - maxWidth - maxLeftWidth) / 2;
 
         graphics.drawString(contentBottomLeft, contentX, contentY);
     }

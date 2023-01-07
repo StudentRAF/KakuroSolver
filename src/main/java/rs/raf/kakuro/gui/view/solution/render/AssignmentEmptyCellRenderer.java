@@ -128,12 +128,16 @@ public class AssignmentEmptyCellRenderer extends RendererBase {
         graphics.setFont(FONT_CONTENT);
         graphics.setColor(isSelected ? FOREGROUND_FOCUS_COLOR : FOREGROUND_COLOR);
 
-        int contentX = (getWidth() - SPACING_HORIZONTAL) / 2 - Math.max(contentMetrics.stringWidth(contentLeft),  contentMetrics.stringWidth(contentRight));
+        int leftWidth  = contentMetrics.stringWidth(contentLeft);
+        int rightWidth = contentMetrics.stringWidth(contentRight);
+        int maxWidth   = Math.max(leftWidth, rightWidth);
+
+        int contentX = (getWidth() - SPACING_HORIZONTAL - maxWidth - leftWidth) / 2;
         int contentY = (int) (COMPONENT_PADDING + titleBounds.getHeight() + titleMetrics.getDescent() + SEPARATOR_THICKNESS + SPACING_VERTICAL + contentBounds.getHeight());
 
         graphics.drawString(contentLeft, contentX, contentY);
 
-        contentX = (getWidth() + SPACING_HORIZONTAL) / 2;
+        contentX = (getWidth() + SPACING_HORIZONTAL + maxWidth - rightWidth) / 2;
 
         graphics.drawString(contentRight, contentX, contentY);
     }

@@ -1,18 +1,18 @@
 package rs.raf.kakuro.gui.view.solution;
 
-import com.formdev.flatlaf.util.ColorFunctions;
 import rs.raf.kakuro.gui.util.ImageUtils;
 import rs.raf.kakuro.gui.view.ApplicationWindow;
 import rs.raf.kakuro.gui.view.solution.render.IRenderer;
 import rs.raf.kakuro.gui.view.solution.render.RendererBase;
 import rs.raf.kakuro.gui.view.solution.render.StepListRenderer;
+import rs.raf.kakuro.gui.view.solution.toolbar.SolutionToolbar;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import java.awt.Color;
+import java.awt.BorderLayout;
 
 public class SolutionWindow extends JDialog {
 
@@ -44,6 +44,7 @@ public class SolutionWindow extends JDialog {
 
     private void setup() {
         setTitle("Solution");
+        setLayout(new BorderLayout());
         setIconImage(ImageUtils.loadImage("Solution"));
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
@@ -54,7 +55,7 @@ public class SolutionWindow extends JDialog {
     }
 
     private void initializeComponents() {
-        scrollPane.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, ColorFunctions.lighten(new Color(59, 61, 63), 0.1f))); //TODO remove
+        scrollPane.setBorder(BorderFactory.createEmptyBorder()); //TODO remove
 
         listSteps.setCellRenderer(new StepListRenderer());
         listSteps.setModel(listModel);
@@ -63,7 +64,8 @@ public class SolutionWindow extends JDialog {
     }
 
     private void addComponents() {
-        add(scrollPane);
+        add(new SolutionToolbar(), BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     public void addStep(RendererBase step) {
