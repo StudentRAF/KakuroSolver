@@ -14,7 +14,7 @@ public class AssignmentClueCellStep extends StepBase {
 
     @Override
     public void perform() {
-        SolutionWindow.window.addStep(new AssignmentClueCellRenderer(clueCell));
+        SolutionWindow.window.addStepRenderer(new AssignmentClueCellRenderer(clueCell));
     }
 
     @Override

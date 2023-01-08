@@ -173,4 +173,16 @@ public class Combination implements Comparable<Combination> {
         return compareTo(combination) == 0;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int value : combination)
+            stringBuilder.append(value).append(" -> ");
+
+        stringBuilder.delete(stringBuilder.length() - 4, stringBuilder.length() - 1);
+
+        return stringBuilder.toString();
+    }
+
 }

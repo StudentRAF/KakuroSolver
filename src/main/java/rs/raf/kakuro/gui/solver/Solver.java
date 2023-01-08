@@ -4,6 +4,8 @@ import rs.raf.kakuro.gui.controller.StepManager;
 import rs.raf.kakuro.gui.controller.steps.AssignmentClueCellStep;
 import rs.raf.kakuro.gui.controller.steps.AssignmentEmptyCellStep;
 import rs.raf.kakuro.gui.controller.steps.AssignmentValueCellStep;
+import rs.raf.kakuro.gui.controller.steps.CalculateBottomCombinationsStep;
+import rs.raf.kakuro.gui.controller.steps.CalculateRightCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.TableBoundsStep;
 import rs.raf.kakuro.gui.model.cell.CellBase;
 import rs.raf.kakuro.gui.model.cell.ClueCell;
@@ -101,6 +103,8 @@ public class Solver {
                     }
 
                     clueCell.calculateRightCombinations();
+
+                    StepManager.addStep(new CalculateRightCombinationsStep(clueCell));
                 }
 
                 if (clueCell.getBottomClue() != 0) {
@@ -112,6 +116,8 @@ public class Solver {
                     }
 
                     clueCell.calculateBottomCombinations();
+
+                    StepManager.addStep(new CalculateBottomCombinationsStep(clueCell));
                 }
             }
     }

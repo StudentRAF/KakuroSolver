@@ -17,7 +17,7 @@ public class TableBoundsStep extends StepBase {
         if (bounds == null)
             return;
 
-        SolutionWindow.window.addStep(new TableBoundsRenderer(bounds));
+        SolutionWindow.window.addStepRenderer(new TableBoundsRenderer(bounds));
     }
 
     @Override

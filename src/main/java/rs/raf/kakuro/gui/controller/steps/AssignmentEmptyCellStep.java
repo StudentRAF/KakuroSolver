@@ -14,7 +14,7 @@ public class AssignmentEmptyCellStep extends StepBase {
 
     @Override
     public void perform() {
-        SolutionWindow.window.addStep(new AssignmentEmptyCellRenderer(emptyCell));
+        SolutionWindow.window.addStepRenderer(new AssignmentEmptyCellRenderer(emptyCell));
     }
 
     @Override

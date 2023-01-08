@@ -14,7 +14,7 @@ public class AssignmentValueCellStep extends StepBase {
 
     @Override
     public void perform() {
-        SolutionWindow.window.addStep(new AssignmentValueCellRenderer(valueCell));
+        SolutionWindow.window.addStepRenderer(new AssignmentValueCellRenderer(valueCell));
     }
 
     @Override

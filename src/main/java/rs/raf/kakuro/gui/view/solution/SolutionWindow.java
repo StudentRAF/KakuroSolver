@@ -68,7 +68,7 @@ public class SolutionWindow extends JDialog {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void addStep(RendererBase step) {
+    public void addStepRenderer(RendererBase step) {
         listModel.addElement(step);
     }
 
