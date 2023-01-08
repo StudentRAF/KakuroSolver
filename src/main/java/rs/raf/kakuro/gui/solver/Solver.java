@@ -6,6 +6,7 @@ import rs.raf.kakuro.gui.controller.steps.AssignmentEmptyCellStep;
 import rs.raf.kakuro.gui.controller.steps.AssignmentValueCellStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateBottomCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateRightCombinationsStep;
+import rs.raf.kakuro.gui.controller.steps.UpdateValueCellValueStep;
 import rs.raf.kakuro.gui.controller.steps.TableBoundsStep;
 import rs.raf.kakuro.gui.controller.steps.UpdateValueCellNotesStep;
 import rs.raf.kakuro.gui.model.attribute.Notes;
@@ -117,8 +118,11 @@ public class Solver {
 
                         StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, before));
 
-                        if (cell.getNotes().activeCount() == 1)
+                        if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
+
+                            StepManager.addStep(new UpdateValueCellValueStep(cell));
+                        }
                     }
                 }
 
@@ -143,8 +147,11 @@ public class Solver {
 
                         StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, before));
 
-                        if (cell.getNotes().activeCount() == 1)
+                        if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
+
+                            StepManager.addStep(new UpdateValueCellValueStep(cell));
+                        }
                     }
                 }
             }
