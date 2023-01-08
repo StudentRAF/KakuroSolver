@@ -7,6 +7,8 @@ import rs.raf.kakuro.gui.controller.steps.AssignmentValueCellStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateBottomCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateRightCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.TableBoundsStep;
+import rs.raf.kakuro.gui.controller.steps.UpdateValueCellNotesStep;
+import rs.raf.kakuro.gui.model.attribute.Notes;
 import rs.raf.kakuro.gui.model.cell.CellBase;
 import rs.raf.kakuro.gui.model.cell.ClueCell;
 import rs.raf.kakuro.gui.model.cell.EmptyCell;
@@ -17,7 +19,7 @@ import rs.raf.kakuro.gui.view.Editor;
 
 public class Solver {
 
-    private static Editor editor = Editor.instance;
+    private static final Editor editor = Editor.instance;
 
     private static Table editorTable;
     private static Table kakuroTable;
@@ -105,6 +107,19 @@ public class Solver {
                     clueCell.calculateRightCombinations();
 
                     StepManager.addStep(new CalculateRightCombinationsStep(clueCell));
+
+                    Notes notesForCombinations = Notes.fromCombinations(clueCell.getRightCombinations());
+
+                    for (ValueCell cell : clueCell.getRightValueCells().getCells()) {
+                        Notes before = cell.getNotes().copy();
+
+                        cell.getNotes().conjunction(notesForCombinations);
+
+                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, before));
+
+                        if (cell.getNotes().activeCount() == 1)
+                            cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
+                    }
                 }
 
                 if (clueCell.getBottomClue() != 0) {
@@ -118,6 +133,19 @@ public class Solver {
                     clueCell.calculateBottomCombinations();
 
                     StepManager.addStep(new CalculateBottomCombinationsStep(clueCell));
+
+                    Notes notesForCombinations = Notes.fromCombinations(clueCell.getBottomCombinations());
+
+                    for (ValueCell cell : clueCell.getBottomValueCells().getCells()) {
+                        Notes before = cell.getNotes().copy();
+
+                        cell.getNotes().conjunction(notesForCombinations);
+
+                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, before));
+
+                        if (cell.getNotes().activeCount() == 1)
+                            cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
+                    }
                 }
             }
     }
@@ -133,6 +161,12 @@ public class Solver {
 
         updateEditorValues();
     }
+
+
+    public static Table kakuroTable() {
+        return kakuroTable;
+    }
+
 
     public static void updateEditorValues() {
         for (int row = 0; row < kakuroTable.getHeight(); ++row)

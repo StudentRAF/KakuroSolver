@@ -185,4 +185,16 @@ public class Notes {
         return true;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int index : getActiveIndexes())
+            stringBuilder.append(index + 1).append(" | ");
+
+        stringBuilder.delete(stringBuilder.length() - 3, stringBuilder.length() - 1);
+
+        return stringBuilder.toString();
+    }
+
 }
