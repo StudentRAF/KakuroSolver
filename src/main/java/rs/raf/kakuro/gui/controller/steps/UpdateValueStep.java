@@ -2,19 +2,19 @@ package rs.raf.kakuro.gui.controller.steps;
 
 import rs.raf.kakuro.gui.model.cell.ValueCell;
 import rs.raf.kakuro.gui.view.solution.SolutionWindow;
-import rs.raf.kakuro.gui.view.solution.render.UpdateValueCellValueRenderer;
+import rs.raf.kakuro.gui.view.solution.render.UpdateValueRenderer;
 
-public class UpdateValueCellValueStep extends StepBase {
+public class UpdateValueStep extends StepBase {
 
     private final ValueCell cell;
 
-    public UpdateValueCellValueStep(ValueCell cell) {
+    public UpdateValueStep(ValueCell cell) {
         this.cell = cell;
     }
 
     @Override
     public void perform() {
-        SolutionWindow.window.addStepRenderer(new UpdateValueCellValueRenderer(cell));
+        SolutionWindow.window.addStepRenderer(new UpdateValueRenderer(cell));
     }
 
     @Override

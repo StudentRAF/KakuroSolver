@@ -17,7 +17,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-public class UpdateValueCellValueRenderer extends RendererBase {
+public class UpdateValueRenderer extends RendererBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
@@ -51,10 +51,10 @@ public class UpdateValueCellValueRenderer extends RendererBase {
     private final String contentRow1Right;
     private final String contentRow2Center;
 
-    public UpdateValueCellValueRenderer(ValueCell cell) {
+    public UpdateValueRenderer(ValueCell cell) {
         contentRow1Left   = "Row:  "      + (cell.getRow()    + 1);
         contentRow1Right  = "Column:  "   + (cell.getColumn() + 1);
-        contentRow2Center = "Set Value: " + cell.getValue();
+        contentRow2Center = "New Value: " + cell.getValue();
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
         contentBounds = FONT_CONTENT.createGlyphVector(new FontRenderContext(null, true, true), "CONTENT").getPixelBounds(null, 0, 0);

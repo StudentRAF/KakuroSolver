@@ -1,7 +1,6 @@
 package rs.raf.kakuro.gui.model.cell;
 
 import rs.raf.kakuro.gui.model.attribute.Combinations;
-import rs.raf.kakuro.gui.solver.Algorithms;
 
 public class ClueCell extends CellBase {
 
@@ -26,63 +25,20 @@ public class ClueCell extends CellBase {
         this.bottomClue = bottomClue;
     }
 
+    public void setRightCombinations(Combinations rightCombinations) {
+        this.rightCombinations = rightCombinations;
+    }
+
+    public void setBottomCombinations(Combinations bottomCombinations) {
+        this.bottomCombinations = bottomCombinations;
+    }
+
     public void addRightValueCell(ValueCell cell) {
         rightValueCells.add(cell);
     }
 
     public void addBottomValueCell(ValueCell cell) {
         bottomValueCells.add(cell);
-    }
-
-    public void calculateRightCombinations() {
-        rightCombinations = Algorithms.combinationsOfNonRepeatingDigitsWithSum(rightClue, getRightValueCellCount());
-    }
-
-    public void calculateBottomCombinations() {
-        bottomCombinations = Algorithms.combinationsOfNonRepeatingDigitsWithSum(bottomClue, getBottomValueCellCount());
-    }
-
-    public void removeExcess() {
-        removeRightExcess();
-        removeBottomExcess();
-    }
-
-    private void removeRightExcess() {
-        if (rightCombinations == null)
-            return;
-
-        ClueValueCells oldValueCells = rightValueCells.copy();
-
-        Algorithms.removeExcessCombinationsAndNotes(rightClue, getRightValueCellCount(), rightCombinations, rightValueCells.getNotes());
-
-        removeExcessChanges(rightValueCells, oldValueCells);
-    }
-
-    private void removeBottomExcess() {
-        if (bottomCombinations == null)
-            return;
-
-        ClueValueCells oldValueCells = bottomValueCells.copy();
-
-        Algorithms.removeExcessCombinationsAndNotes(bottomClue, getBottomValueCellCount(), bottomCombinations, bottomValueCells.getNotes());
-
-        removeExcessChanges(bottomValueCells, oldValueCells);
-    }
-
-    private void removeExcessChanges(ClueValueCells clueValueCells, ClueValueCells oldValueCells) {
-        for (int index = 0; index < clueValueCells.size(); ++index)
-            if (!clueValueCells.get(index).getNotes().equals(oldValueCells.get(index).getNotes())) {
-                ValueCell cell = clueValueCells.get(index);
-
-                if (cell.getNotes().activeCount() == 1)
-                    cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
-
-                if (cell.getTopClue() != null)
-                    cell.getTopClue().removeExcess();
-
-                if (cell.getLeftClue() != null)
-                    cell.getLeftClue().removeExcess();
-            }
     }
 
     public int getRightValueCellCount() {

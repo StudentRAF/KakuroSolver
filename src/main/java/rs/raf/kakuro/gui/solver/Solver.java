@@ -7,11 +7,14 @@ import rs.raf.kakuro.gui.controller.steps.AssignmentValueCellStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateBottomCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateRightCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.TableBoundsStep;
-import rs.raf.kakuro.gui.controller.steps.UpdateValueCellNotesStep;
-import rs.raf.kakuro.gui.controller.steps.UpdateValueCellValueStep;
+import rs.raf.kakuro.gui.controller.steps.UpdateCombinationsStep;
+import rs.raf.kakuro.gui.controller.steps.UpdateNotesStep;
+import rs.raf.kakuro.gui.controller.steps.UpdateValueStep;
+import rs.raf.kakuro.gui.model.attribute.Combinations;
 import rs.raf.kakuro.gui.model.attribute.Notes;
 import rs.raf.kakuro.gui.model.cell.CellBase;
 import rs.raf.kakuro.gui.model.cell.ClueCell;
+import rs.raf.kakuro.gui.model.cell.ClueValueCells;
 import rs.raf.kakuro.gui.model.cell.EmptyCell;
 import rs.raf.kakuro.gui.model.cell.ValueCell;
 import rs.raf.kakuro.gui.model.data.Bounds;
@@ -105,7 +108,7 @@ public class Solver {
                         valueCell.setLeftClue(clueCell);
                     }
 
-                    clueCell.calculateRightCombinations();
+                    clueCell.setRightCombinations(Algorithms.combinationsOfNonRepeatingDigitsWithSum(clueCell.getRightClue(), clueCell.getRightValueCellCount()));
 
                     StepManager.addStep(new CalculateRightCombinationsStep(clueCell));
 
@@ -116,12 +119,12 @@ public class Solver {
 
                         cell.getNotes().conjunction(notesForCombinations);
 
-                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, oldNotes));
+                        StepManager.addStep(new UpdateNotesStep(cell, notesForCombinations, oldNotes));
 
                         if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
 
-                            StepManager.addStep(new UpdateValueCellValueStep(cell));
+                            StepManager.addStep(new UpdateValueStep(cell));
                         }
                     }
                 }
@@ -134,7 +137,7 @@ public class Solver {
                         valueCell.setTopClue(clueCell);
                     }
 
-                    clueCell.calculateBottomCombinations();
+                    clueCell.setBottomCombinations(Algorithms.combinationsOfNonRepeatingDigitsWithSum(clueCell.getBottomClue(), clueCell.getBottomValueCellCount()));
 
                     StepManager.addStep(new CalculateBottomCombinationsStep(clueCell));
 
@@ -145,12 +148,12 @@ public class Solver {
 
                         cell.getNotes().conjunction(notesForCombinations);
 
-                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, oldNotes));
+                        StepManager.addStep(new UpdateNotesStep(cell, notesForCombinations, oldNotes));
 
                         if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
 
-                            StepManager.addStep(new UpdateValueCellValueStep(cell));
+                            StepManager.addStep(new UpdateValueStep(cell));
                         }
                     }
                 }
@@ -163,12 +166,50 @@ public class Solver {
                 if (!(kakuroTable.getCell(row, column) instanceof ClueCell clueCell))
                     continue;
 
-                clueCell.removeExcess();
+                removeExcess(clueCell, clueCell.getRightClue(),  clueCell.getRightCombinations(),  clueCell.getRightValueCells() , true);
+                removeExcess(clueCell, clueCell.getBottomClue(), clueCell.getBottomCombinations(), clueCell.getBottomValueCells(), false);
             }
 
         updateEditorValues();
     }
 
+    private static void removeExcess(ClueCell cell, int clue, Combinations combinations, ClueValueCells clueValueCells, boolean isRight) {
+        if (combinations == null)
+            return;
+
+        Combinations oldCombinations = combinations.copy();
+        ClueValueCells oldValueCells = clueValueCells.copy();
+
+        Algorithms.removeExcessCombinationsAndNotes(clue, clueValueCells.size(), combinations, clueValueCells.getNotes());
+
+        StepManager.addStep(new UpdateCombinationsStep(cell, oldCombinations, isRight));
+
+        removeExcessChanges(clueValueCells, oldValueCells);
+    }
+
+    private static void removeExcessChanges(ClueValueCells clueValueCells, ClueValueCells oldValueCells) {
+        for (int index = 0; index < clueValueCells.size(); ++index) {
+            ValueCell valueCell = clueValueCells.get(index);
+
+            //TODO StepManager Notes
+
+            if (!valueCell.getNotes().equals(oldValueCells.get(index).getNotes())) {
+                if (valueCell.getNotes().activeCount() == 1) {
+                    valueCell.setValue(valueCell.getNotes().getActiveIndexes()[0] + 1);
+
+                    StepManager.addStep(new UpdateValueStep(valueCell));
+                }
+
+                ClueCell clueCell = valueCell.getLeftClue();
+                if (clueCell != null)
+                    removeExcess(clueCell, clueCell.getRightClue(), clueCell.getRightCombinations(), clueCell.getRightValueCells(), true);
+
+                clueCell = valueCell.getTopClue();
+                if (clueCell != null)
+                    removeExcess(clueCell, clueCell.getBottomClue(), clueCell.getBottomCombinations(), clueCell.getBottomValueCells(), false);
+            }
+        }
+    }
 
     public static Table kakuroTable() {
         return kakuroTable;
