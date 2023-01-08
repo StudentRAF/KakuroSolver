@@ -51,7 +51,7 @@ public class AssignmentValueCellRenderer extends RendererBase {
     private final String contentRow1Right;
 
     public AssignmentValueCellRenderer(ValueCell cell) {
-        contentRow1Left = "Row:  " + (cell.getRow() + 1);
+        contentRow1Left  = "Row:  "    + (cell.getRow()    + 1);
         contentRow1Right = "Column:  " + (cell.getColumn() + 1);
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
@@ -66,10 +66,10 @@ public class AssignmentValueCellRenderer extends RendererBase {
         //      | Before Component
         height += COMPONENT_PADDING;
 
-        //      | Title Ascent             | Title Descent             | Title Separator
+        //Title | Title Ascent             | Title Descent             | Title Separator
         height += titleBounds.getHeight()  + titleMetrics.getDescent() + SEPARATOR_THICKNESS;
 
-        //      | Before Content   | Content Height
+        //Row1  | Before Content   | Content Height
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
         //      | After Component   | Border

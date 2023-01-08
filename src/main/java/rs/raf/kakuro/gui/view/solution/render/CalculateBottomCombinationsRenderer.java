@@ -55,7 +55,7 @@ public class CalculateBottomCombinationsRenderer extends RendererBase {
     private final List<String> contentList = new ArrayList<>();
 
     public CalculateBottomCombinationsRenderer(ClueCell cell) {
-        contentRow1Left = "Row:  " + (cell.getRow() + 1);
+        contentRow1Left  = "Row:  "    + (cell.getRow()    + 1);
         contentRow1Right = "Column:  " + (cell.getColumn() + 1);
 
         for (int index = 0; index < cell.getBottomCombinations().size(); ++index)
@@ -73,13 +73,13 @@ public class CalculateBottomCombinationsRenderer extends RendererBase {
         //      | Before Component
         height += COMPONENT_PADDING;
 
-        //      | Title Ascent             | Title Descent             | Title Separator
+        //Title | Title Ascent             | Title Descent             | Title Separator
         height += titleBounds.getHeight()  + titleMetrics.getDescent() + SEPARATOR_THICKNESS;
 
-        //      | Before Content   | Content Height
+        //Row1  | Before Content   | Content Height
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
-        //       | Before Content   | Content Height             | Number of Combinations
+        //Rows  | Before Content   | Content Height             | Number of Combinations
         height += (SPACING_VERTICAL + contentBounds.getHeight()) * contentList.size();
 
         //      | After Component   | Border

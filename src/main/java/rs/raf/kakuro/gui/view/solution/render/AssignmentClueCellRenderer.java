@@ -53,10 +53,10 @@ public class AssignmentClueCellRenderer extends RendererBase {
     private final String contentRow2Right;
 
     public AssignmentClueCellRenderer(ClueCell cell) {
-        contentRow1Left = "Row:  " + (cell.getRow() + 1);
-        contentRow1Right = "Column:  " + (cell.getColumn() + 1);
-        contentRow2Left = "Bottom Clue:  " + cell.getBottomClue();
-        contentRow2Right = "Right Clue:  " + cell.getRightClue();
+        contentRow1Left  = "Row:  "         + (cell.getRow()    + 1);
+        contentRow1Right = "Column:  "      + (cell.getColumn() + 1);
+        contentRow2Left  = "Bottom Clue:  " + cell.getBottomClue();
+        contentRow2Right = "Right Clue:  "  + cell.getRightClue();
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
         contentBounds = FONT_CONTENT.createGlyphVector(new FontRenderContext(null, true, true), "CONTENT").getPixelBounds(null, 0, 0);
@@ -70,13 +70,13 @@ public class AssignmentClueCellRenderer extends RendererBase {
         //      | Before Component
         height += COMPONENT_PADDING;
 
-        //      | Title Ascent             | Title Descent             | Title Separator
+        //Title | Title Ascent             | Title Descent             | Title Separator
         height += titleBounds.getHeight()  + titleMetrics.getDescent() + SEPARATOR_THICKNESS;
 
-        //      | Before Content   | Content Height
+        //Row1  | Before Content   | Content Height
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
-        //      | Before Content   | Content Height
+        //Row2  | Before Content   | Content Height
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
         //      | After Component   | Border

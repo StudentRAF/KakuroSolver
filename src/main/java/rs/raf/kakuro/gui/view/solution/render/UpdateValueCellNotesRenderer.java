@@ -54,12 +54,12 @@ public class UpdateValueCellNotesRenderer extends RendererBase {
     private final String contentRow3Center;
     private final String contentRow4Center;
 
-    public UpdateValueCellNotesRenderer(ValueCell cell, Notes combinationNotes, Notes previousNotes) {
-        contentRow1Left   = "Row:  "                    + (cell.getRow() + 1);
+    public UpdateValueCellNotesRenderer(ValueCell cell, Notes combinationNotes, Notes oldNotes) {
+        contentRow1Left   = "Row:  "                    + (cell.getRow()    + 1);
         contentRow1Right  = "Column:  "                 + (cell.getColumn() + 1);
         contentRow2Center = "Notes for Combinations:  " + combinationNotes;
-        contentRow3Center = "Before:  " + previousNotes;
-        contentRow4Center = "After:  " + cell.getNotes();
+        contentRow3Center = "Before:  "                 + oldNotes;
+        contentRow4Center = "After:  "                  + cell.getNotes();
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
         contentBounds = FONT_CONTENT.createGlyphVector(new FontRenderContext(null, true, true), "CONTENT").getPixelBounds(null, 0, 0);

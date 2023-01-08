@@ -6,9 +6,9 @@ import rs.raf.kakuro.gui.controller.steps.AssignmentEmptyCellStep;
 import rs.raf.kakuro.gui.controller.steps.AssignmentValueCellStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateBottomCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateRightCombinationsStep;
-import rs.raf.kakuro.gui.controller.steps.UpdateValueCellValueStep;
 import rs.raf.kakuro.gui.controller.steps.TableBoundsStep;
 import rs.raf.kakuro.gui.controller.steps.UpdateValueCellNotesStep;
+import rs.raf.kakuro.gui.controller.steps.UpdateValueCellValueStep;
 import rs.raf.kakuro.gui.model.attribute.Notes;
 import rs.raf.kakuro.gui.model.cell.CellBase;
 import rs.raf.kakuro.gui.model.cell.ClueCell;
@@ -112,11 +112,11 @@ public class Solver {
                     Notes notesForCombinations = Notes.fromCombinations(clueCell.getRightCombinations());
 
                     for (ValueCell cell : clueCell.getRightValueCells().getCells()) {
-                        Notes before = cell.getNotes().copy();
+                        Notes oldNotes = cell.getNotes().copy();
 
                         cell.getNotes().conjunction(notesForCombinations);
 
-                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, before));
+                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, oldNotes));
 
                         if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
@@ -141,11 +141,11 @@ public class Solver {
                     Notes notesForCombinations = Notes.fromCombinations(clueCell.getBottomCombinations());
 
                     for (ValueCell cell : clueCell.getBottomValueCells().getCells()) {
-                        Notes before = cell.getNotes().copy();
+                        Notes oldNotes = cell.getNotes().copy();
 
                         cell.getNotes().conjunction(notesForCombinations);
 
-                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, before));
+                        StepManager.addStep(new UpdateValueCellNotesStep(cell, notesForCombinations, oldNotes));
 
                         if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);

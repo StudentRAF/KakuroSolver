@@ -53,10 +53,10 @@ public class TableBoundsRenderer extends RendererBase {
     private final String contentRow2Right;
 
     public TableBoundsRenderer(Bounds bounds) {
-        contentRow1Left = "Start Row:  " + (bounds.getStartRow() + 1);
+        contentRow1Left  = "Start Row:  "    + (bounds.getStartRow()    + 1);
         contentRow1Right = "Start Column:  " + (bounds.getStartColumn() + 1);
-        contentRow2Left = "End Row:  " + (bounds.getEndRow() + 1);
-        contentRow2Right = "End Column:  " + (bounds.getEndColumn() + 1);
+        contentRow2Left  = "End Row:  "      + (bounds.getEndRow()      + 1);
+        contentRow2Right = "End Column:  "   + (bounds.getEndColumn()   + 1);
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
         contentBounds = FONT_CONTENT.createGlyphVector(new FontRenderContext(null, true, true), "CONTENT").getPixelBounds(null, 0, 0);
@@ -70,13 +70,13 @@ public class TableBoundsRenderer extends RendererBase {
         //      | Before Component
         height += COMPONENT_PADDING;
 
-        //      | Title Ascent             | Title Descent             | Title Separator
+        //Title | Title Ascent             | Title Descent             | Title Separator
         height += titleBounds.getHeight()  + titleMetrics.getDescent() + SEPARATOR_THICKNESS;
 
-        //      | Before Content   | Content Height
+        //Row1  | Before Content   | Content Height
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
-        //      | Before Content   | Content Height
+        //Row2  | Before Content   | Content Height
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
         //      | After Component   | Border

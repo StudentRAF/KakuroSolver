@@ -8,18 +8,18 @@ import rs.raf.kakuro.gui.view.solution.render.UpdateValueCellNotesRenderer;
 public class UpdateValueCellNotesStep extends StepBase {
 
     private final ValueCell cell;
-    private final Notes previousNotes;
+    private final Notes oldNotes;
     private final Notes combinationNotes;
 
-    public UpdateValueCellNotesStep(ValueCell cell, Notes combinationNotes, Notes previousNotes) {
+    public UpdateValueCellNotesStep(ValueCell cell, Notes combinationNotes, Notes oldNotes) {
         this.cell = cell;
-        this.previousNotes = previousNotes;
+        this.oldNotes = oldNotes;
         this.combinationNotes = combinationNotes;
     }
 
     @Override
     public void perform() {
-        SolutionWindow.window.addStepRenderer(new UpdateValueCellNotesRenderer(cell, combinationNotes, previousNotes));
+        SolutionWindow.window.addStepRenderer(new UpdateValueCellNotesRenderer(cell, combinationNotes, oldNotes));
     }
 
     @Override

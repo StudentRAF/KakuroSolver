@@ -46,7 +46,7 @@ public class SolutionWindow extends JDialog {
         setIconImage(ImageUtils.loadImage("Solution"));
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        setSize(415, 1002);
+        setSize(425, 1002);
         //setResizable(false);
 
         setLocationRelativeTo(ApplicationWindow.window);
