@@ -22,6 +22,7 @@ public class AssignmentValueCellRenderer extends RendererBase {
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
     private static final Color FOREGROUND_COLOR       = BASE_FOREGROUND_COLOR;
+    private static final Color SEPARATOR_COLOR        = BASE_SEPARATOR_COLOR;
     private static final Color BACKGROUND_FOCUS_COLOR = ColorFunctions.lighten(BACKGROUND_COLOR, 0.01f);
     private static final Color FOREGROUND_FOCUS_COLOR = ColorFunctions.lighten(FOREGROUND_COLOR, 0.1f);
 
@@ -46,12 +47,12 @@ public class AssignmentValueCellRenderer extends RendererBase {
     private boolean isSelected = false;
 
     private final String title = "Value Cell Assignment";
-    private final String contentLeft;
-    private final String contentRight;
+    private final String contentRow1Left;
+    private final String contentRow1Right;
 
     public AssignmentValueCellRenderer(ValueCell cell) {
-        contentLeft  = "Row:  "    + (cell.getRow()    + 1);
-        contentRight = "Column:  " + (cell.getColumn() + 1);
+        contentRow1Left = "Row:  " + (cell.getRow() + 1);
+        contentRow1Right = "Column:  " + (cell.getColumn() + 1);
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
         contentBounds = FONT_CONTENT.createGlyphVector(new FontRenderContext(null, true, true), "CONTENT").getPixelBounds(null, 0, 0);
@@ -115,7 +116,7 @@ public class AssignmentValueCellRenderer extends RendererBase {
     private void paintSeparator(Graphics2D graphics) {
         FontMetrics titleMetrics = graphics.getFontMetrics(FONT_TITLE);
 
-        graphics.setColor(BORDER_COLOR);
+        graphics.setColor(SEPARATOR_COLOR);
         graphics.setStroke(new BasicStroke(SEPARATOR_THICKNESS));
 
         int separatorX = SEPARATOR_PADDING;
@@ -128,18 +129,21 @@ public class AssignmentValueCellRenderer extends RendererBase {
         graphics.setFont(FONT_CONTENT);
         graphics.setColor(isSelected ? FOREGROUND_FOCUS_COLOR : FOREGROUND_COLOR);
 
-        int leftWidth  = contentMetrics.stringWidth(contentLeft);
-        int rightWidth = contentMetrics.stringWidth(contentRight);
-        int maxWidth   = Math.max(leftWidth, rightWidth);
+        int contentX = 0;
+        int contentY = (int) (COMPONENT_PADDING + titleBounds.getHeight() + titleMetrics.getDescent() + SEPARATOR_THICKNESS);
 
-        int contentX = (getWidth() - SPACING_HORIZONTAL - maxWidth - leftWidth) / 2;
-        int contentY = (int) (COMPONENT_PADDING + titleBounds.getHeight() + titleMetrics.getDescent() + SEPARATOR_THICKNESS + SPACING_VERTICAL + contentBounds.getHeight());
+        int row1LeftWidth  = contentMetrics.stringWidth(contentRow1Left);
+        int row1RightWidth = contentMetrics.stringWidth(contentRow1Right);
 
-        graphics.drawString(contentLeft, contentX, contentY);
+        //Row 1
+        contentX += (getWidth() - row1LeftWidth - SPACING_HORIZONTAL - row1RightWidth) / 2;
+        contentY += SPACING_VERTICAL + contentBounds.getHeight();
 
-        contentX = (getWidth() + SPACING_HORIZONTAL + maxWidth - rightWidth) / 2;
+        graphics.drawString(contentRow1Left, contentX, contentY);
 
-        graphics.drawString(contentRight, contentX, contentY);
+        contentX += SPACING_HORIZONTAL + row1LeftWidth;
+
+        graphics.drawString(contentRow1Right, contentX, contentY);
     }
 
 }

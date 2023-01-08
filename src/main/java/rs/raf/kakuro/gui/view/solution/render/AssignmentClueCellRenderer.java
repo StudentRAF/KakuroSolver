@@ -22,6 +22,7 @@ public class AssignmentClueCellRenderer extends RendererBase {
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
     private static final Color FOREGROUND_COLOR       = BASE_FOREGROUND_COLOR;
+    private static final Color SEPARATOR_COLOR        = BASE_SEPARATOR_COLOR;
     private static final Color BACKGROUND_FOCUS_COLOR = ColorFunctions.lighten(BACKGROUND_COLOR, 0.01f);
     private static final Color FOREGROUND_FOCUS_COLOR = ColorFunctions.lighten(FOREGROUND_COLOR, 0.1f);
 
@@ -46,16 +47,16 @@ public class AssignmentClueCellRenderer extends RendererBase {
     private boolean isSelected = false;
 
     private final String title = "Clue Cell Assignment";
-    private final String contentTopLeft;
-    private final String contentTopRight;
-    private final String contentBottomLeft;
-    private final String contentBottomRight;
+    private final String contentRow1Left;
+    private final String contentRow1Right;
+    private final String contentRow2Left;
+    private final String contentRow2Right;
 
     public AssignmentClueCellRenderer(ClueCell cell) {
-        contentTopLeft     = "Row:  "         + (cell.getRow()    + 1);
-        contentTopRight    = "Column:  "      + (cell.getColumn() + 1);
-        contentBottomLeft  = "Bottom Clue:  " + cell.getBottomClue();
-        contentBottomRight = "Right Clue:  "  + cell.getRightClue();
+        contentRow1Left = "Row:  " + (cell.getRow() + 1);
+        contentRow1Right = "Column:  " + (cell.getColumn() + 1);
+        contentRow2Left = "Bottom Clue:  " + cell.getBottomClue();
+        contentRow2Right = "Right Clue:  " + cell.getRightClue();
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
         contentBounds = FONT_CONTENT.createGlyphVector(new FontRenderContext(null, true, true), "CONTENT").getPixelBounds(null, 0, 0);
@@ -122,7 +123,7 @@ public class AssignmentClueCellRenderer extends RendererBase {
     private void paintSeparator(Graphics2D graphics) {
         FontMetrics titleMetrics = graphics.getFontMetrics(FONT_TITLE);
 
-        graphics.setColor(BORDER_COLOR);
+        graphics.setColor(SEPARATOR_COLOR);
         graphics.setStroke(new BasicStroke(SEPARATOR_THICKNESS));
 
         int separatorX = SEPARATOR_PADDING;
@@ -135,26 +136,35 @@ public class AssignmentClueCellRenderer extends RendererBase {
         graphics.setFont(FONT_CONTENT);
         graphics.setColor(isSelected ? FOREGROUND_FOCUS_COLOR : FOREGROUND_COLOR);
 
-        int maxLeftWidth  = Math.max(contentMetrics.stringWidth(contentTopLeft),  contentMetrics.stringWidth(contentBottomLeft));
-        int maxRightWidth = Math.max(contentMetrics.stringWidth(contentTopRight), contentMetrics.stringWidth(contentBottomRight));
-        int maxWidth      = Math.max(maxLeftWidth, maxRightWidth);
+        int contentX = 0;
+        int contentY = (int) (COMPONENT_PADDING + titleBounds.getHeight() + titleMetrics.getDescent() + SEPARATOR_THICKNESS);
 
-        int contentX = (getWidth() - SPACING_HORIZONTAL - maxWidth - maxLeftWidth) / 2;
-        int contentY = (int) (COMPONENT_PADDING + titleBounds.getHeight() + titleMetrics.getDescent() + SEPARATOR_THICKNESS + SPACING_VERTICAL + contentBounds.getHeight());
+        int row1LeftWidth  = contentMetrics.stringWidth(contentRow1Left);
+        int row1RightWidth = contentMetrics.stringWidth(contentRow1Right);
+        int row2LeftWidth  = contentMetrics.stringWidth(contentRow2Left);
+        int row2RightWidth = contentMetrics.stringWidth(contentRow2Right);
 
-        graphics.drawString(contentTopLeft, contentX, contentY);
+        int maxLeftWidth  = Math.max(row1LeftWidth,  row2LeftWidth);
+        int maxRightWidth = Math.max(row1RightWidth, row2RightWidth);
 
-        contentX = (getWidth() + SPACING_HORIZONTAL + maxWidth - maxRightWidth) / 2;
-
-        graphics.drawString(contentTopRight, contentX, contentY);
-
+        //Row 1
+        contentX += (getWidth() - maxLeftWidth - SPACING_HORIZONTAL - maxRightWidth) / 2;
         contentY += SPACING_VERTICAL + contentBounds.getHeight();
 
-        graphics.drawString(contentBottomRight, contentX, contentY);
+        graphics.drawString(contentRow1Left, contentX, contentY);
 
-        contentX = (getWidth() - SPACING_HORIZONTAL - maxWidth - maxLeftWidth) / 2;
+        contentX += SPACING_HORIZONTAL + maxLeftWidth;
 
-        graphics.drawString(contentBottomLeft, contentX, contentY);
+        graphics.drawString(contentRow1Right, contentX, contentY);
+
+        //Row 2
+        contentY += SPACING_VERTICAL + contentBounds.getHeight();
+
+        graphics.drawString(contentRow2Right, contentX, contentY);
+
+        contentX -= SPACING_HORIZONTAL + maxLeftWidth;
+
+        graphics.drawString(contentRow2Left, contentX, contentY);
     }
 
 }

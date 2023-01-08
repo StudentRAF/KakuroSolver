@@ -23,6 +23,7 @@ public class UpdateValueCellNotesRenderer extends RendererBase {
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
     private static final Color FOREGROUND_COLOR       = BASE_FOREGROUND_COLOR;
+    private static final Color SEPARATOR_COLOR        = BASE_SEPARATOR_COLOR;
     private static final Color BACKGROUND_FOCUS_COLOR = ColorFunctions.lighten(BACKGROUND_COLOR, 0.01f);
     private static final Color FOREGROUND_FOCUS_COLOR = ColorFunctions.lighten(FOREGROUND_COLOR, 0.1f);
 
@@ -131,7 +132,7 @@ public class UpdateValueCellNotesRenderer extends RendererBase {
     private void paintSeparator(Graphics2D graphics) {
         FontMetrics titleMetrics = graphics.getFontMetrics(FONT_TITLE);
 
-        graphics.setColor(BORDER_COLOR);
+        graphics.setColor(SEPARATOR_COLOR);
         graphics.setStroke(new BasicStroke(SEPARATOR_THICKNESS));
 
         int separatorX = SEPARATOR_PADDING;
@@ -147,10 +148,13 @@ public class UpdateValueCellNotesRenderer extends RendererBase {
         int contentX = 0;
         int contentY = (int) (COMPONENT_PADDING + titleBounds.getHeight() + titleMetrics.getDescent() + SEPARATOR_THICKNESS);
 
-        //Row 1
         int row1LeftWidth  = contentMetrics.stringWidth(contentRow1Left);
         int row1RightWidth = contentMetrics.stringWidth(contentRow1Right);
+        int row2Width      = contentMetrics.stringWidth(contentRow2Center);
+        int row3Width      = contentMetrics.stringWidth(contentRow3Center);
+        int row4Width      = contentMetrics.stringWidth(contentRow4Center);
 
+        //Row 1
         contentX += (getWidth() - row1LeftWidth - SPACING_HORIZONTAL - row1RightWidth) / 2;
         contentY += SPACING_VERTICAL + contentBounds.getHeight();
 
@@ -163,8 +167,6 @@ public class UpdateValueCellNotesRenderer extends RendererBase {
         contentX = 0;
 
         //Row 2
-        int row2Width = contentMetrics.stringWidth(contentRow2Center);
-
         contentX += (getWidth() - row2Width) / 2;
         contentY += SPACING_VERTICAL + contentBounds.getHeight();
 
@@ -173,8 +175,6 @@ public class UpdateValueCellNotesRenderer extends RendererBase {
         contentX = 0;
 
         //Row 3
-        int row3Width  = contentMetrics.stringWidth(contentRow3Center);
-
         contentX += (getWidth() - row3Width) / 2;
         contentY += SPACING_VERTICAL + contentBounds.getHeight();
 
@@ -183,8 +183,6 @@ public class UpdateValueCellNotesRenderer extends RendererBase {
         contentX = 0;
 
         //Row 4
-        int row4Width = contentMetrics.stringWidth(contentRow4Center);
-
         contentX += (getWidth() - row4Width) / 2;
         contentY += SPACING_VERTICAL + contentBounds.getHeight();
 

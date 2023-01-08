@@ -178,9 +178,9 @@ public class Combination implements Comparable<Combination> {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int value : combination)
-            stringBuilder.append(value).append(" -> ");
+            stringBuilder.append(value).append(" - ");
 
-        stringBuilder.delete(stringBuilder.length() - 4, stringBuilder.length() - 1);
+        stringBuilder.delete(stringBuilder.length() - 3, stringBuilder.length() - 1);
 
         return stringBuilder.toString();
     }

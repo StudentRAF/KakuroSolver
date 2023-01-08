@@ -2,7 +2,6 @@ package rs.raf.kakuro.gui.view.solution;
 
 import rs.raf.kakuro.gui.util.ImageUtils;
 import rs.raf.kakuro.gui.view.ApplicationWindow;
-import rs.raf.kakuro.gui.view.solution.render.IRenderer;
 import rs.raf.kakuro.gui.view.solution.render.RendererBase;
 import rs.raf.kakuro.gui.view.solution.render.StepListRenderer;
 import rs.raf.kakuro.gui.view.solution.toolbar.SolutionToolbar;
@@ -25,12 +24,11 @@ public class SolutionWindow extends JDialog {
         return instance;
     }
 
-    private final ApplicationWindow application = ApplicationWindow.window;
+    private final JScrollPane scrollPane = new JScrollPane();
 
-    private JScrollPane scrollPane = new JScrollPane();
-    private JList listSteps = new JList();
-    private DefaultListModel<IRenderer> listModel = new DefaultListModel();
+    private final JList<RendererBase> listSteps = new JList<>();
 
+    private final DefaultListModel<RendererBase> listModel = new DefaultListModel<>();
 
     private SolutionWindow() {
         super(ApplicationWindow.window);
@@ -48,7 +46,7 @@ public class SolutionWindow extends JDialog {
         setIconImage(ImageUtils.loadImage("Solution"));
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        setSize(300, 400);
+        setSize(415, 1002);
         //setResizable(false);
 
         setLocationRelativeTo(ApplicationWindow.window);
