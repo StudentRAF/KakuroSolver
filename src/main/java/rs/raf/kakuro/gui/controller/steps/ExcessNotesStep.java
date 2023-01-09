@@ -21,6 +21,11 @@ public class ExcessNotesStep extends StepBase {
     }
 
     @Override
+    public void focus() {
+
+    }
+
+    @Override
     public void display() {
 
     }

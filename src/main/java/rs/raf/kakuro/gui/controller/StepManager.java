@@ -1,6 +1,7 @@
 package rs.raf.kakuro.gui.controller;
 
 import rs.raf.kakuro.gui.controller.steps.StepBase;
+import rs.raf.kakuro.gui.view.solution.SolutionWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ public class StepManager {
         if (currentStep == steps.size())
             return;
 
+        SolutionWindow.window.setSelectedStepIndex(currentStep);
+
         steps.get(currentStep++).display();
     }
 
@@ -27,7 +30,23 @@ public class StepManager {
         if (currentStep == 0)
             return;
 
-        steps.get(currentStep--).hide();
+        SolutionWindow.window.setSelectedStepIndex(currentStep);
+
+        steps.get(--currentStep).hide();
+    }
+
+    public static StepBase peekNext() {
+        if (currentStep == steps.size())
+            return null;
+
+        return steps.get(currentStep + 1);
+    }
+
+    public static StepBase peekPrevious() {
+        if (currentStep == 0)
+            return null;
+
+        return steps.get(currentStep - 1);
     }
 
     public static boolean hasNext() {

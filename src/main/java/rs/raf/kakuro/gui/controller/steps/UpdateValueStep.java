@@ -18,6 +18,11 @@ public class UpdateValueStep extends StepBase {
     }
 
     @Override
+    public void focus() {
+
+    }
+
+    @Override
     public void display() {
 
     }

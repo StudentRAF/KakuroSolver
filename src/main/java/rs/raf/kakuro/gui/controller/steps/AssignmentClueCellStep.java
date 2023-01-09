@@ -1,26 +1,39 @@
 package rs.raf.kakuro.gui.controller.steps;
 
+import rs.raf.kakuro.gui.controller.StepManager;
 import rs.raf.kakuro.gui.model.cell.ClueCell;
 import rs.raf.kakuro.gui.view.solution.SolutionWindow;
 import rs.raf.kakuro.gui.view.solution.render.AssignmentClueCellRenderer;
 
 public class AssignmentClueCellStep extends StepBase {
 
-    private final ClueCell clueCell;
+    private final ClueCell cell;
 
-    public AssignmentClueCellStep(ClueCell clueCell) {
-        this.clueCell = clueCell;
+    public AssignmentClueCellStep(ClueCell cell) {
+        this.cell = cell;
     }
 
     @Override
     public void perform() {
-        SolutionWindow.window.addStepRenderer(new AssignmentClueCellRenderer(clueCell));
+        SolutionWindow.window.addStepRenderer(new AssignmentClueCellRenderer(cell));
     }
 
     @Override
-    public void display() { }
+    public void focus() {
+        editor.setEditorCellFocused(getEditorRow(cell.getRow()), getEditorColumn(cell.getColumn()));
+    }
 
     @Override
-    public void hide() { }
+    public void display() {
+        focus();
+    }
+
+    @Override
+    public void hide() {
+        if (StepManager.peekPrevious() == null)
+            return;
+
+        StepManager.peekPrevious().focus();
+    }
 
 }

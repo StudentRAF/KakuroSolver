@@ -13,8 +13,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -53,9 +51,41 @@ public class EditorClueCell extends EditorCellBase {
         cell = new ClueCell(row, column);
 
         addKeyListener(new CellKeyListener());
-        addFocusListener(new CellFocusListener());
         addMouseListener(new CellMouseListener());
     }
+
+
+    @Override
+    public void setFocused() {
+        if (currentAction instanceof SwitchCellAction)
+            return;
+
+        if (!activeRight && !activeBottom) {
+            borderColor     = BORDER_FOCUS_COLOR;
+            borderThickness = 3;
+        }
+
+        selectionColor  = BORDER_FOCUS_COLOR;
+        backgroundColor = BACKGROUND_FOCUS_COLOR;
+        foregroundColor = FOREGROUND_FOCUS_COLOR;
+
+        repaint();
+    }
+
+    @Override
+    public void setUnfocused() {
+        borderColor     = BORDER_COLOR;
+        selectionColor  = BORDER_COLOR;
+        backgroundColor = BACKGROUND_COLOR;
+        foregroundColor = FOREGROUND_COLOR;
+
+        borderThickness = 2;
+
+        activeBottom = activeRight = false;
+
+        repaint();
+    }
+
 
     @Override
     protected void paintCell(Graphics2D graphics) {
@@ -188,42 +218,6 @@ public class EditorClueCell extends EditorCellBase {
     }
 
     //region Listeners
-
-    private class CellFocusListener extends FocusAdapter {
-
-        @Override
-        public void focusGained(FocusEvent event) {
-            if (currentAction instanceof SwitchCellAction)
-                return;
-
-            if (!activeRight && !activeBottom) {
-                borderColor     = BORDER_FOCUS_COLOR;
-                borderThickness = 3;
-            }
-
-            selectionColor  = BORDER_FOCUS_COLOR;
-            backgroundColor = BACKGROUND_FOCUS_COLOR;
-            foregroundColor = FOREGROUND_FOCUS_COLOR;
-
-
-            repaint();
-        }
-
-        @Override
-        public void focusLost(FocusEvent event) {
-            borderColor     = BORDER_COLOR;
-            selectionColor  = BORDER_COLOR;
-            backgroundColor = BACKGROUND_COLOR;
-            foregroundColor = FOREGROUND_COLOR;
-
-            borderThickness = 2;
-
-            activeBottom = activeRight = false;
-
-            repaint();
-        }
-
-    }
 
     private static final Map<Integer, Integer> keyMap = Map.ofEntries(
             Map.entry(  8, -1), // BACKSPACE

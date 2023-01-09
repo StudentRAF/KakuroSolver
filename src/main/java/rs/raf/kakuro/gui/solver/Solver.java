@@ -35,8 +35,6 @@ public class Solver {
         initializeTableBounds();
         initializeTableCells();
         initializeTableData();
-
-        updateEditorValues();
     }
 
     private static void initializeTableBounds() {
@@ -170,8 +168,6 @@ public class Solver {
                 removeExcess(clueCell, clueCell.getRightClue(),  clueCell.getRightCombinations(),  clueCell.getRightValueCells() , true);
                 removeExcess(clueCell, clueCell.getBottomClue(), clueCell.getBottomCombinations(), clueCell.getBottomValueCells(), false);
             }
-
-        updateEditorValues();
     }
 
     private static void removeExcess(ClueCell cell, int clue, Combinations combinations, ClueValueCells clueValueCells, boolean isRight) {
@@ -216,6 +212,9 @@ public class Solver {
         return kakuroTable;
     }
 
+    public static Table editorTable() {
+        return editorTable;
+    }
 
     public static void updateEditorValues() {
         for (int row = 0; row < kakuroTable.getHeight(); ++row)

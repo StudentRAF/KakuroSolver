@@ -38,6 +38,7 @@ public class Toolbar extends JToolBar {
         add(ActionManager.getAction(Number2Action.class));
 
         group.setSelected(group.getElements().nextElement().getModel(), true);
+
         Editor.instance.setSwitchState();
     }
 

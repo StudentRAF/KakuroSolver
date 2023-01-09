@@ -10,8 +10,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
@@ -20,7 +18,7 @@ import java.util.Map;
 public class EditorValueCell extends EditorCellBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
-    private static final Color BACKGROUND_COLOR       = ColorFunctions.lighten(BASE_BACKGROUND_COLOR, 0.03f);
+    private static final Color BACKGROUND_COLOR       = ColorFunctions.lighten(BASE_BACKGROUND_COLOR, 0.02f);
     private static final Color FOREGROUND_COLOR       = ColorFunctions.lighten(BASE_FOREGROUND_COLOR, 0.1f);
     private static final Color BORDER_FOCUS_COLOR     = BASE_BORDER_FOCUS_COLOR;
     private static final Color BACKGROUND_FOCUS_COLOR = ColorFunctions.lighten(BACKGROUND_COLOR, 0.01f);
@@ -32,6 +30,8 @@ public class EditorValueCell extends EditorCellBase {
 
     private int borderThickness = 2;
 
+    private boolean isEdited = false;
+
     private final ValueCell cell;
 
     public EditorValueCell(int row, int column) {
@@ -39,9 +39,10 @@ public class EditorValueCell extends EditorCellBase {
 
         cell = new ValueCell(row, column);
 
-        addFocusListener(new CellFocusListener());
         addKeyListener(new CellKeyListener());
     }
+
+    //region Paint Cell
 
     @Override
     protected void paintCell(Graphics2D graphics) {
@@ -85,6 +86,9 @@ public class EditorValueCell extends EditorCellBase {
     }
 
     private void paintCellNote(Graphics2D graphics, int value) {
+        if (!isEdited)
+            return;
+
         Font font = new Font(Fonts.DIN_MEDIUM.getName(), Font.PLAIN, 22);
 
         FontMetrics metrics = graphics.getFontMetrics(font);
@@ -101,6 +105,34 @@ public class EditorValueCell extends EditorCellBase {
         graphics.drawString(Integer.toString(value + 1), x, y);
     }
 
+    //endregion
+
+
+    @Override
+    public void setFocused() {
+        if (currentAction instanceof SwitchCellAction)
+            return;
+
+        borderColor     = BORDER_FOCUS_COLOR;
+        backgroundColor = BACKGROUND_FOCUS_COLOR;
+        foregroundColor = FOREGROUND_FOCUS_COLOR;
+
+        borderThickness = 3;
+
+        repaint();
+    }
+
+    @Override
+    public void setUnfocused() {
+
+        borderColor     = BORDER_COLOR;
+        backgroundColor = BACKGROUND_COLOR;
+        foregroundColor = FOREGROUND_COLOR;
+
+        borderThickness = 2;
+
+        repaint();
+    }
 
     @Override
     public EditorCellBase getSuccessor() {
@@ -116,35 +148,6 @@ public class EditorValueCell extends EditorCellBase {
     }
 
     //region Listeners
-
-    private class CellFocusListener extends FocusAdapter {
-
-        @Override
-        public void focusGained(FocusEvent event) {
-            if (currentAction instanceof SwitchCellAction)
-                return;
-
-            borderColor     = BORDER_FOCUS_COLOR;
-            backgroundColor = BACKGROUND_FOCUS_COLOR;
-            foregroundColor = FOREGROUND_FOCUS_COLOR;
-
-            borderThickness = 3;
-
-            repaint();
-        }
-
-        @Override
-        public void focusLost(FocusEvent event) {
-            borderColor     = BORDER_COLOR;
-            backgroundColor = BACKGROUND_COLOR;
-            foregroundColor = FOREGROUND_COLOR;
-
-            borderThickness = 2;
-
-            repaint();
-        }
-
-    }
 
     private static final Map<Integer, Integer> keyMap = Map.ofEntries(
             Map.entry( 27, 0), // ESCAPE
@@ -190,11 +193,10 @@ public class EditorValueCell extends EditorCellBase {
 
     }
 
-
-
     //endregion
 
     //region Setters and Getters
+
     /**
      * Sets the cell value.
      * @param value value
@@ -202,6 +204,10 @@ public class EditorValueCell extends EditorCellBase {
     public void setValue(int value) {
         cell.setValue(value);
         repaint();
+    }
+
+    public void setEdited(boolean isEdited) {
+        this.isEdited = isEdited;
     }
 
     public void reverseNote(int index) {
@@ -220,6 +226,10 @@ public class EditorValueCell extends EditorCellBase {
      */
     public int getValue() {
         return cell.getValue();
+    }
+
+    public boolean isEdited() {
+        return isEdited;
     }
 
     //endregion

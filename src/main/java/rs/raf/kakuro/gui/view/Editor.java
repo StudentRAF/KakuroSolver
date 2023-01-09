@@ -13,7 +13,7 @@ import java.awt.GridLayout;
 
 public class Editor extends JPanel {
 
-    public static final int rows = 10;
+    public static final int rows    = 10;
     public static final int columns = 13;
 
     public static final Editor instance = instantiate();
@@ -26,6 +26,7 @@ public class Editor extends JPanel {
     }
 
     private EditorCellBase[][] editorCells;
+    private EditorCellBase     activeCell;
 
     private Editor() { }
 
@@ -283,7 +284,7 @@ public class Editor extends JPanel {
             for (EditorCellBase cell: rowCells)
                 cell.setupSwitchAction();
 
-        setEditorCellFocused(0, 0);
+        setEditorCellFocused(activeCell != null ? activeCell.getRow() : 0, activeCell != null ? activeCell.getColumn() : 0);
     }
 
     public void setEditState() {
@@ -291,10 +292,14 @@ public class Editor extends JPanel {
             for (EditorCellBase cell: rowCells)
                 cell.setupEditAction();
 
-        setEditorCellFocused(0, 0);
+        setEditorCellFocused(activeCell != null ? activeCell.getRow() : 0, activeCell != null ? activeCell.getColumn() : 0);
     }
 
     //endregion
+
+    public void setActiveCell(EditorCellBase activeCell) {
+        this.activeCell = activeCell;
+    }
 
     public CellBase[][] getCells() {
         CellBase[][] cells = new CellBase[rows][columns];
@@ -306,12 +311,21 @@ public class Editor extends JPanel {
         return cells;
     }
 
+    public EditorCellBase getActiveCell() {
+        return activeCell;
+    }
+
     public EditorCellBase getEditorCell(int row, int column) {
         return editorCells[row][column];
     }
 
     public void setEditorCellFocused(int row, int column) {
-        editorCells[row][column].requestFocus();
+        if (activeCell != null)
+            activeCell.setUnfocused();
+
+        activeCell = editorCells[row][column];
+
+        activeCell.setFocused();
     }
 
 }

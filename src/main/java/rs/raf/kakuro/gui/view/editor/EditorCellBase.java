@@ -13,14 +13,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public abstract class EditorCellBase extends FlatButton {
 
-    protected static final Color BASE_BACKGROUND_COLOR = new Color(59, 61, 63);
-    protected static final Color BASE_FOREGROUND_COLOR = new Color(162, 164, 166);
-    protected static final Color BASE_BORDER_COLOR = ColorFunctions.lighten(new Color(59, 61, 63), 0.1f);
+    protected static final Color BASE_BACKGROUND_COLOR   = new Color(59, 61, 63);
+    protected static final Color BASE_FOREGROUND_COLOR   = new Color(162, 164, 166);
+    protected static final Color BASE_BORDER_COLOR       = ColorFunctions.lighten(new Color(59, 61, 63), 0.1f);
     protected static final Color BASE_BORDER_FOCUS_COLOR = new Color(10, 106, 230);
 
     protected static Action currentAction = null;
@@ -40,6 +42,7 @@ public abstract class EditorCellBase extends FlatButton {
         setAction(currentAction);
 
         addKeyListener(new BaseCellKeyListener());
+        addFocusListener(new CellFocusListener(this));
     }
 
     @Override
@@ -61,6 +64,10 @@ public abstract class EditorCellBase extends FlatButton {
         setAction(currentAction);
     }
 
+    public abstract void setFocused();
+
+    public abstract void setUnfocused();
+
     protected abstract void paintCell(Graphics2D graphics);
 
     public abstract EditorCellBase getSuccessor();
@@ -77,6 +84,8 @@ public abstract class EditorCellBase extends FlatButton {
         return column;
     }
 
+    //region Listeners
+
     private class BaseCellKeyListener extends KeyAdapter {
 
         @Override
@@ -86,11 +95,37 @@ public abstract class EditorCellBase extends FlatButton {
             if (code < 37 || code > 40)
                 return;
 
-            Editor.instance.setEditorCellFocused(Math.min(Math.max(row + (event.getKeyCode() - 39) % 2, 0), Editor.rows - 1),
+            Editor.instance.setEditorCellFocused(Math.min(Math.max(row +    (event.getKeyCode() - 39) % 2, 0), Editor.rows     - 1),
                                                  Math.min(Math.max(column + (event.getKeyCode() - 38) % 2, 0), Editor.columns - 1));
-
         }
 
     }
+
+    private class CellFocusListener extends FocusAdapter {
+
+        private final EditorCellBase cellBase;
+
+        public CellFocusListener(EditorCellBase cellBase) {
+            this.cellBase = cellBase;
+        }
+
+        @Override
+        public void focusGained(FocusEvent event) {
+            setFocused();
+
+            if (event.getCause().equals(FocusEvent.Cause.UNKNOWN))
+                Editor.instance.setActiveCell(cellBase);
+
+            Editor.instance.getActiveCell().requestFocus();
+        }
+
+        @Override
+        public void focusLost(FocusEvent event) {
+            setUnfocused();
+        }
+
+    }
+
+    //endregion
 
 }

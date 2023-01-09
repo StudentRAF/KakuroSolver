@@ -21,6 +21,9 @@ public class TableBoundsStep extends StepBase {
     }
 
     @Override
+    public void focus() { }
+
+    @Override
     public void display() { }
 
     @Override

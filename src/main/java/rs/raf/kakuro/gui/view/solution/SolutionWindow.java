@@ -70,4 +70,9 @@ public class SolutionWindow extends JDialog {
         listModel.addElement(step);
     }
 
+    public void setSelectedStepIndex(int index) {
+        listSteps.setSelectedIndex(index);
+        listSteps.ensureIndexIsVisible(index);
+    }
+
 }

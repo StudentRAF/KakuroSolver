@@ -7,8 +7,6 @@ import rs.raf.kakuro.gui.model.cell.EmptyCell;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.geom.Rectangle2D;
 
 public class EditorEmptyCell extends EditorCellBase {
@@ -29,9 +27,9 @@ public class EditorEmptyCell extends EditorCellBase {
         super(row, column);
 
         cell = new EmptyCell(row, column);
-
-        addFocusListener(new CellFocusListener());
     }
+
+    //region Paint Cell
 
     @Override
     protected void paintCell(Graphics2D graphics) {
@@ -49,6 +47,32 @@ public class EditorEmptyCell extends EditorCellBase {
         graphics.fill(new Rectangle2D.Double(borderThickness, borderThickness, getWidth() - 2 * borderThickness, getHeight() - 2 * borderThickness));
     }
 
+    //endregion
+
+
+    @Override
+    public void setFocused() {
+        if (currentAction instanceof SwitchCellAction)
+            return;
+
+        borderColor     = BORDER_FOCUS_COLOR;
+        backgroundColor = BACKGROUND_FOCUS_COLOR;
+
+        borderThickness = 3;
+
+        repaint();
+    }
+
+    @Override
+    public void setUnfocused() {
+        borderColor     = BORDER_COLOR;
+        backgroundColor = BACKGROUND_COLOR;
+
+        borderThickness = 2;
+
+        repaint();
+    }
+
     @Override
     public EditorCellBase getSuccessor() {
         return new EditorClueCell(row, column);
@@ -61,36 +85,5 @@ public class EditorEmptyCell extends EditorCellBase {
     public CellBase getCell() {
         return cell;
     }
-
-    //region Listeners
-
-    private class CellFocusListener extends FocusAdapter {
-
-        @Override
-        public void focusGained(FocusEvent event) {
-            if (currentAction instanceof SwitchCellAction)
-                return;
-
-            borderColor     = BORDER_FOCUS_COLOR;
-            backgroundColor = BACKGROUND_FOCUS_COLOR;
-
-            borderThickness = 3;
-
-            repaint();
-        }
-
-        @Override
-        public void focusLost(FocusEvent event) {
-            borderColor     = BORDER_COLOR;
-            backgroundColor = BACKGROUND_COLOR;
-
-            borderThickness = 2;
-
-            repaint();
-        }
-
-    }
-
-    //endregion
 
 }
