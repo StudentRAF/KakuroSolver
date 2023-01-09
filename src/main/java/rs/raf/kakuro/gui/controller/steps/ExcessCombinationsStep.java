@@ -1,5 +1,6 @@
 package rs.raf.kakuro.gui.controller.steps;
 
+import rs.raf.kakuro.gui.controller.StepManager;
 import rs.raf.kakuro.gui.model.attribute.Combinations;
 import rs.raf.kakuro.gui.model.cell.ClueCell;
 import rs.raf.kakuro.gui.view.solution.SolutionWindow;
@@ -24,17 +25,20 @@ public class ExcessCombinationsStep extends StepBase {
 
     @Override
     public void focus() {
-
+        editor.setEditorCellFocused(getEditorRow(cell.getRow()), getEditorColumn(cell.getColumn()));
     }
 
     @Override
     public void display() {
-
+        focus();
     }
 
     @Override
     public void hide() {
+        if (StepManager.peekPrevious() == null)
+            return;
 
+        StepManager.peekPrevious().focus();
     }
 
 }

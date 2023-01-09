@@ -10,7 +10,7 @@ public class StepManager {
 
     private static final List<StepBase> steps = new ArrayList<>();
 
-    private static int currentStep = 0;
+    private static int currentStep = -1;
 
     public static void addStep(StepBase step) {
         steps.add(step);
@@ -18,32 +18,32 @@ public class StepManager {
     }
 
     public static void nextStep() {
-        if (currentStep == steps.size())
+        if (currentStep == steps.size() - 1)
             return;
 
-        SolutionWindow.window.setSelectedStepIndex(currentStep);
+        steps.get(++currentStep).display();
 
-        steps.get(currentStep++).display();
+        SolutionWindow.window.setSelectedStepIndex(currentStep);
     }
 
     public static void previousStep() {
-        if (currentStep == 0)
+        if (currentStep < 1)
             return;
 
-        SolutionWindow.window.setSelectedStepIndex(currentStep);
+        steps.get(currentStep).hide();
 
-        steps.get(--currentStep).hide();
+        SolutionWindow.window.setSelectedStepIndex(--currentStep);
     }
 
     public static StepBase peekNext() {
-        if (currentStep == steps.size())
+        if (currentStep == steps.size() - 1)
             return null;
 
         return steps.get(currentStep + 1);
     }
 
     public static StepBase peekPrevious() {
-        if (currentStep == 0)
+        if (currentStep < 1)
             return null;
 
         return steps.get(currentStep - 1);

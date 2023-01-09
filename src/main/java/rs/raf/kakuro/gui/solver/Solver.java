@@ -22,6 +22,8 @@ import rs.raf.kakuro.gui.model.data.Bounds;
 import rs.raf.kakuro.gui.model.data.Table;
 import rs.raf.kakuro.gui.view.Editor;
 
+import java.util.List;
+
 public class Solver {
 
     private static final Editor editor = Editor.instance;
@@ -174,37 +176,50 @@ public class Solver {
         if (combinations == null)
             return;
 
-        Combinations oldCombinations = combinations.copy();
-        ClueValueCells oldValueCells = clueValueCells.copy();
+        Combinations   oldCombinations   = combinations.copy();
+        ClueValueCells oldClueValueCells = clueValueCells.copy();
 
         Algorithms.removeExcessCombinationsAndNotes(clue, clueValueCells.size(), combinations, clueValueCells.getNotes());
 
-        StepManager.addStep(new ExcessCombinationsStep(cell, oldCombinations, isRight));
+        notifyExcessCombinations(cell, oldCombinations, isRight);
+        notifyExcessNotes(clueValueCells.getCells(), oldClueValueCells.getNotes());
 
-        removeExcessChanges(clueValueCells, oldValueCells);
+        removeExcessChanges(clueValueCells, oldClueValueCells, isRight);
     }
 
-    private static void removeExcessChanges(ClueValueCells clueValueCells, ClueValueCells oldValueCells) {
+    private static void notifyExcessCombinations(ClueCell cell, Combinations oldCombinations, boolean isRight) {
+        StepManager.addStep(new ExcessCombinationsStep(cell, oldCombinations, isRight));
+    }
+
+    private static void notifyExcessNotes(List<ValueCell> valueCells, List<Notes> oldNotesList) {
+        for (int index = 0; index < valueCells.size(); ++index) {
+            ValueCell valueCell = valueCells.get(index);
+            Notes     oldNotes  = oldNotesList.get(index);
+
+            StepManager.addStep(new ExcessNotesStep(valueCell, oldNotes));
+
+            if (valueCell.getValue() == 0 && valueCell.getNotes().activeCount() == 1) {
+                valueCell.setValue(valueCell.getNotes().getActiveIndexes()[0] + 1);
+
+                StepManager.addStep(new UpdateValueStep(valueCell));
+            }
+        }
+    }
+
+    private static void removeExcessChanges(ClueValueCells clueValueCells, ClueValueCells oldValueCells, boolean isRight) {
         for (int index = 0; index < clueValueCells.size(); ++index) {
             ValueCell valueCell = clueValueCells.get(index);
 
-            StepManager.addStep(new ExcessNotesStep(valueCell, oldValueCells.get(index).getNotes()));
+            if (valueCell.getNotes().equals(oldValueCells.get(index).getNotes()))
+                continue;
 
-            if (!valueCell.getNotes().equals(oldValueCells.get(index).getNotes())) {
-                if (valueCell.getNotes().activeCount() == 1) {
-                    valueCell.setValue(valueCell.getNotes().getActiveIndexes()[0] + 1);
+            ClueCell clueCell = valueCell.getLeftClue();
+            if (clueCell != null && !isRight)
+                removeExcess(clueCell, clueCell.getRightClue(), clueCell.getRightCombinations(), clueCell.getRightValueCells(), true);
 
-                    StepManager.addStep(new UpdateValueStep(valueCell));
-                }
-
-                ClueCell clueCell = valueCell.getLeftClue();
-                if (clueCell != null)
-                    removeExcess(clueCell, clueCell.getRightClue(), clueCell.getRightCombinations(), clueCell.getRightValueCells(), true);
-
-                clueCell = valueCell.getTopClue();
-                if (clueCell != null)
-                    removeExcess(clueCell, clueCell.getBottomClue(), clueCell.getBottomCombinations(), clueCell.getBottomValueCells(), false);
-            }
+            clueCell = valueCell.getTopClue();
+            if (clueCell != null && isRight)
+                removeExcess(clueCell, clueCell.getBottomClue(), clueCell.getBottomCombinations(), clueCell.getBottomValueCells(), false);
         }
     }
 
