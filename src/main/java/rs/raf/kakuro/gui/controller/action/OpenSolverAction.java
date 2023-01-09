@@ -15,7 +15,9 @@ public class OpenSolverAction extends KakuroAction {
     @Override
     public void actionPerformed(ActionEvent event) {
         Editor.instance.setEditState();
+
         SolutionWindow.window.setVisible(true);
+
         Solver.solve();
     }
 

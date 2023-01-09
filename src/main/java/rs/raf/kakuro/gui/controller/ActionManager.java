@@ -4,13 +4,10 @@ import rs.raf.kakuro.gui.controller.action.EditCellAction;
 import rs.raf.kakuro.gui.controller.action.EditStateAction;
 import rs.raf.kakuro.gui.controller.action.KakuroAction;
 import rs.raf.kakuro.gui.controller.action.NextAction;
-import rs.raf.kakuro.gui.controller.action.Number0Action;
-import rs.raf.kakuro.gui.controller.action.Number1Action;
-import rs.raf.kakuro.gui.controller.action.Number2Action;
+import rs.raf.kakuro.gui.controller.action.OpenSolverAction;
 import rs.raf.kakuro.gui.controller.action.PauseAction;
 import rs.raf.kakuro.gui.controller.action.PlayAction;
 import rs.raf.kakuro.gui.controller.action.PreviousAction;
-import rs.raf.kakuro.gui.controller.action.OpenSolverAction;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
 import rs.raf.kakuro.gui.controller.action.SwitchStateAction;
 
@@ -19,9 +16,6 @@ import java.util.List;
 public class ActionManager {
 
     private static final List<KakuroAction> actions = List.of(
-            new Number0Action(),
-            new Number1Action(),
-            new Number2Action(),
             new EditCellAction(),
             new EditStateAction(),
             new NextAction(),
