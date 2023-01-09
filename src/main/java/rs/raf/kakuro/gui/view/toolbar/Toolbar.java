@@ -5,7 +5,7 @@ import rs.raf.kakuro.gui.controller.action.EditStateAction;
 import rs.raf.kakuro.gui.controller.action.Number0Action;
 import rs.raf.kakuro.gui.controller.action.Number1Action;
 import rs.raf.kakuro.gui.controller.action.Number2Action;
-import rs.raf.kakuro.gui.controller.action.SolveAction;
+import rs.raf.kakuro.gui.controller.action.OpenSolverAction;
 import rs.raf.kakuro.gui.controller.action.SwitchStateAction;
 import rs.raf.kakuro.gui.view.Editor;
 
@@ -29,7 +29,7 @@ public class Toolbar extends JToolBar {
 
         addSeparator();
 
-        add(ActionManager.getAction(SolveAction.class));
+        add(ActionManager.getAction(OpenSolverAction.class));
 
         addSeparator();
 

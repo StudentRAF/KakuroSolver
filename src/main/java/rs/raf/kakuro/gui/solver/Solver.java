@@ -21,6 +21,7 @@ import rs.raf.kakuro.gui.model.cell.ValueCell;
 import rs.raf.kakuro.gui.model.data.Bounds;
 import rs.raf.kakuro.gui.model.data.Table;
 import rs.raf.kakuro.gui.view.Editor;
+import rs.raf.kakuro.gui.view.solution.SolutionWindow;
 
 import java.util.List;
 
@@ -31,15 +32,16 @@ public class Solver {
     private static Table editorTable;
     private static Table kakuroTable;
 
-    public static void initialize() {
+    public static void solve() {
         clear();
 
-        initializeTableBounds();
-        initializeTableCells();
-        initializeTableData();
+        initializeTables();
+        assignKakuroTableCells();
+        assignKakuroTableMetaData();
+        removeExcessCellNotes();
     }
 
-    private static void initializeTableBounds() {
+    private static void initializeTables() {
         editorTable = new Table(editor.getCells());
         kakuroTable = new Table();
 
@@ -61,7 +63,7 @@ public class Solver {
         StepManager.addStep(new TableBoundsStep(kakuroTable.getBounds()));
     }
 
-    public static void initializeTableCells() {
+    public static void assignKakuroTableCells() {
         if (!kakuroTable.isValid())
             return;
 
@@ -95,7 +97,7 @@ public class Solver {
             }
     }
 
-    public static void initializeTableData() {
+    public static void assignKakuroTableMetaData() {
         for (int row = 0; row < kakuroTable.getHeight(); ++row)
             for (int column = 0; column < kakuroTable.getWidth(); ++ column) {
                 if (!(kakuroTable.getCell(row, column) instanceof ClueCell clueCell))
@@ -231,22 +233,13 @@ public class Solver {
         return editorTable;
     }
 
-    public static void updateEditorValues() {
-        for (int row = 0; row < kakuroTable.getHeight(); ++row)
-            for (int column = 0; column < kakuroTable.getWidth(); ++column) {
-                if (kakuroTable.getCell(row, column) instanceof ValueCell kakuroValueCell) {
-                    ValueCell editorValueCell = (ValueCell) editorTable.getCell(row, column, kakuroTable.getBounds());
-                    editorValueCell.getNotes().set(kakuroValueCell.getNotes().getValues());
-                    editorValueCell.setValue(kakuroValueCell.getValue());
-                }
-            }
-
-        Editor.instance.repaint();
-    }
-
     public static void clear() {
         kakuroTable = null;
         editorTable = null;
+
+        StepManager.clear();
+        Editor.instance.clear();
+        SolutionWindow.window.clear();
     }
 
 }

@@ -74,6 +74,10 @@ public class Notes {
             setActive(index);
     }
 
+    public void setActiveAll() {
+        setActive(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
+    }
+
     public void setInactive(int index) {
         if (index >= size() || index < 0)
             return;

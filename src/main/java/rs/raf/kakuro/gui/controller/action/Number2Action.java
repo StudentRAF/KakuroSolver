@@ -1,5 +1,7 @@
 package rs.raf.kakuro.gui.controller.action;
 
+import rs.raf.kakuro.gui.solver.Solver;
+
 import java.awt.event.ActionEvent;
 
 public class Number2Action extends KakuroAction {
@@ -10,7 +12,7 @@ public class Number2Action extends KakuroAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-
+        Solver.clear();
     }
 
 }

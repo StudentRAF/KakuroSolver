@@ -173,6 +173,12 @@ public class EditorValueCell extends EditorCellBase {
             Map.entry(105, 9)  // NumPad-9
                                                                      );
 
+    public void clear() {
+        cell.getNotes().setActiveAll();
+        cell.setValue(0);
+        isEdited = false;
+    }
+
     private class CellKeyListener extends KeyAdapter {
 
         @Override

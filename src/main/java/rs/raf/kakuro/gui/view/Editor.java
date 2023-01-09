@@ -328,4 +328,13 @@ public class Editor extends JPanel {
         activeCell.setFocused();
     }
 
+    public void clear() {
+        for (int row = 0; row < rows; ++row)
+            for (int column = 0; column < columns; ++column)
+                if (editorCells[row][column] instanceof EditorValueCell editorValueCell)
+                    editorValueCell.clear();
+
+        repaint();
+    }
+
 }

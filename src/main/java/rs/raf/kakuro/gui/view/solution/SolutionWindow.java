@@ -53,7 +53,7 @@ public class SolutionWindow extends JDialog {
     }
 
     private void initializeComponents() {
-        scrollPane.setBorder(BorderFactory.createEmptyBorder()); //TODO remove
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         listSteps.setCellRenderer(new StepListRenderer());
         listSteps.setModel(listModel);
@@ -73,6 +73,13 @@ public class SolutionWindow extends JDialog {
     public void setSelectedStepIndex(int index) {
         listSteps.setSelectedIndex(index);
         listSteps.ensureIndexIsVisible(index);
+    }
+
+    public void clear() {
+        if (listModel.size() > 0)
+            listSteps.ensureIndexIsVisible(0);
+
+        listModel.clear();
     }
 
 }

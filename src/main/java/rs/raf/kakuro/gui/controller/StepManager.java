@@ -53,4 +53,9 @@ public class StepManager {
         return currentStep != steps.size();
     }
 
+    public static void clear() {
+        steps.clear();
+        currentStep = -1;
+    }
+
 }

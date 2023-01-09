@@ -10,7 +10,7 @@ import rs.raf.kakuro.gui.controller.action.Number2Action;
 import rs.raf.kakuro.gui.controller.action.PauseAction;
 import rs.raf.kakuro.gui.controller.action.PlayAction;
 import rs.raf.kakuro.gui.controller.action.PreviousAction;
-import rs.raf.kakuro.gui.controller.action.SolveAction;
+import rs.raf.kakuro.gui.controller.action.OpenSolverAction;
 import rs.raf.kakuro.gui.controller.action.SwitchCellAction;
 import rs.raf.kakuro.gui.controller.action.SwitchStateAction;
 
@@ -28,7 +28,7 @@ public class ActionManager {
             new PauseAction(),
             new PlayAction(),
             new PreviousAction(),
-            new SolveAction(),
+            new OpenSolverAction(),
             new SwitchCellAction(),
             new SwitchStateAction()
                                                              );
