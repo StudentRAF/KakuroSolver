@@ -18,7 +18,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-public class UpdateNotesRenderer extends RendererBase {
+public class ExcessNotesRenderer extends RendererBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
@@ -47,19 +47,17 @@ public class UpdateNotesRenderer extends RendererBase {
 
     private boolean isSelected = false;
 
-    private final String title = "Update Cell Notes";
+    private final String title = "Remove Excess Cell Notes";
     private final String contentRow1Left;
     private final String contentRow1Right;
     private final String contentRow2Center;
     private final String contentRow3Center;
-    private final String contentRow4Center;
 
-    public UpdateNotesRenderer(ValueCell cell, Notes combinationNotes, Notes oldNotes) {
-        contentRow1Left   = "Row:  "                    + (cell.getRow()    + 1);
-        contentRow1Right  = "Column:  "                 + (cell.getColumn() + 1);
-        contentRow2Center = "Notes for Combinations:  " + combinationNotes;
-        contentRow3Center = "Old:  "                    + oldNotes;
-        contentRow4Center = "New:  "                    + cell.getNotes();
+    public ExcessNotesRenderer(ValueCell cell, Notes oldNotes) {
+        contentRow1Left   = "Row:  "    + (cell.getRow()    + 1);
+        contentRow1Right  = "Column:  " + (cell.getColumn() + 1);
+        contentRow2Center = "Old:  "    + oldNotes;
+        contentRow3Center = "New:  "    + cell.getNotes();
 
         titleBounds   = FONT_TITLE.createGlyphVector(new FontRenderContext(null, true, true), "TITLE").getPixelBounds(null, 0, 0);
         contentBounds = FONT_CONTENT.createGlyphVector(new FontRenderContext(null, true, true), "CONTENT").getPixelBounds(null, 0, 0);
@@ -83,9 +81,6 @@ public class UpdateNotesRenderer extends RendererBase {
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
         //Row3  | Before Content   | Content Height
-        height += SPACING_VERTICAL + contentBounds.getHeight();
-
-        //Row4  | Before Content   | Content Height
         height += SPACING_VERTICAL + contentBounds.getHeight();
 
         //      | After Component   | Border
@@ -152,7 +147,6 @@ public class UpdateNotesRenderer extends RendererBase {
         int row1RightWidth = contentMetrics.stringWidth(contentRow1Right);
         int row2Width      = contentMetrics.stringWidth(contentRow2Center);
         int row3Width      = contentMetrics.stringWidth(contentRow3Center);
-        int row4Width      = contentMetrics.stringWidth(contentRow4Center);
 
         //Row 1
         contentX += (getWidth() - row1LeftWidth - SPACING_HORIZONTAL - row1RightWidth) / 2;
@@ -179,14 +173,6 @@ public class UpdateNotesRenderer extends RendererBase {
         contentY += SPACING_VERTICAL + contentBounds.getHeight();
 
         graphics.drawString(contentRow3Center, contentX, contentY);
-
-        contentX = 0;
-
-        //Row 4
-        contentX += (getWidth() - row4Width) / 2;
-        contentY += SPACING_VERTICAL + contentBounds.getHeight();
-
-        graphics.drawString(contentRow4Center, contentX, contentY);
     }
 
 }

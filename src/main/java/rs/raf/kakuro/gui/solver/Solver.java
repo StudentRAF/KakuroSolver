@@ -3,12 +3,13 @@ package rs.raf.kakuro.gui.solver;
 import rs.raf.kakuro.gui.controller.StepManager;
 import rs.raf.kakuro.gui.controller.steps.AssignmentClueCellStep;
 import rs.raf.kakuro.gui.controller.steps.AssignmentEmptyCellStep;
+import rs.raf.kakuro.gui.controller.steps.AssignmentNotesStep;
 import rs.raf.kakuro.gui.controller.steps.AssignmentValueCellStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateBottomCombinationsStep;
 import rs.raf.kakuro.gui.controller.steps.CalculateRightCombinationsStep;
+import rs.raf.kakuro.gui.controller.steps.ExcessCombinationsStep;
+import rs.raf.kakuro.gui.controller.steps.ExcessNotesStep;
 import rs.raf.kakuro.gui.controller.steps.TableBoundsStep;
-import rs.raf.kakuro.gui.controller.steps.UpdateCombinationsStep;
-import rs.raf.kakuro.gui.controller.steps.UpdateNotesStep;
 import rs.raf.kakuro.gui.controller.steps.UpdateValueStep;
 import rs.raf.kakuro.gui.model.attribute.Combinations;
 import rs.raf.kakuro.gui.model.attribute.Notes;
@@ -119,7 +120,7 @@ public class Solver {
 
                         cell.getNotes().conjunction(notesForCombinations);
 
-                        StepManager.addStep(new UpdateNotesStep(cell, notesForCombinations, oldNotes));
+                        StepManager.addStep(new AssignmentNotesStep(cell, notesForCombinations, oldNotes));
 
                         if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
@@ -148,7 +149,7 @@ public class Solver {
 
                         cell.getNotes().conjunction(notesForCombinations);
 
-                        StepManager.addStep(new UpdateNotesStep(cell, notesForCombinations, oldNotes));
+                        StepManager.addStep(new AssignmentNotesStep(cell, notesForCombinations, oldNotes));
 
                         if (cell.getNotes().activeCount() == 1) {
                             cell.setValue(cell.getNotes().getActiveIndexes()[0] + 1);
@@ -182,7 +183,7 @@ public class Solver {
 
         Algorithms.removeExcessCombinationsAndNotes(clue, clueValueCells.size(), combinations, clueValueCells.getNotes());
 
-        StepManager.addStep(new UpdateCombinationsStep(cell, oldCombinations, isRight));
+        StepManager.addStep(new ExcessCombinationsStep(cell, oldCombinations, isRight));
 
         removeExcessChanges(clueValueCells, oldValueCells);
     }
@@ -191,7 +192,7 @@ public class Solver {
         for (int index = 0; index < clueValueCells.size(); ++index) {
             ValueCell valueCell = clueValueCells.get(index);
 
-            //TODO StepManager Notes
+            StepManager.addStep(new ExcessNotesStep(valueCell, oldValueCells.get(index).getNotes()));
 
             if (!valueCell.getNotes().equals(oldValueCells.get(index).getNotes())) {
                 if (valueCell.getNotes().activeCount() == 1) {

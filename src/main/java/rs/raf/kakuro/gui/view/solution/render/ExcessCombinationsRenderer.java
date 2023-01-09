@@ -20,7 +20,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateCombinationsRenderer extends RendererBase {
+public class ExcessCombinationsRenderer extends RendererBase {
 
     private static final Color BORDER_COLOR           = BASE_BORDER_COLOR;
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
@@ -58,8 +58,8 @@ public class UpdateCombinationsRenderer extends RendererBase {
     private final List<String> contentList1 = new ArrayList<>();
     private final List<String> contentList2 = new ArrayList<>();
 
-    public UpdateCombinationsRenderer(ClueCell cell, Combinations oldCombinations, boolean isRight) {
-        title = "Update " + (isRight ? "Right" : "Bottom") + " Combinations";
+    public ExcessCombinationsRenderer(ClueCell cell, Combinations oldCombinations, boolean isRight) {
+        title = "Remove Excess " + (isRight ? "Right" : "Bottom") + " Combinations";
 
         contentRow1Left  = "Row:  "    + (cell.getRow()    + 1);
         contentRow1Right = "Column:  " + (cell.getColumn() + 1);
