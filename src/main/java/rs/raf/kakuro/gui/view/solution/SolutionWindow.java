@@ -24,6 +24,8 @@ public class SolutionWindow extends JDialog {
         return instance;
     }
 
+    private final SolutionToolbar toolbar = new SolutionToolbar();
+
     private final JScrollPane scrollPane = new JScrollPane();
 
     private final JList<RendererBase> listSteps = new JList<>();
@@ -62,7 +64,7 @@ public class SolutionWindow extends JDialog {
     }
 
     private void addComponents() {
-        add(new SolutionToolbar(), BorderLayout.NORTH);
+        add(toolbar, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -73,6 +75,14 @@ public class SolutionWindow extends JDialog {
     public void setSelectedStepIndex(int index) {
         listSteps.setSelectedIndex(index);
         listSteps.ensureIndexIsVisible(index);
+    }
+
+    public int getTimerPeriod() {
+        return toolbar.getTimerPeriod();
+    }
+
+    public void changeTimerAction() {
+        toolbar.changeTimerAction();
     }
 
     public void clear() {
