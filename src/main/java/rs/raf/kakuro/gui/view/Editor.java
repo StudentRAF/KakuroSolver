@@ -52,7 +52,7 @@ public class Editor extends JPanel {
             for (int column = 0; column < columns; ++column)
                 editorCells[row][column] = new EditorEmptyCell(row, column);
 
-        example2();
+        example1();
     }
 
     private void example1() {
@@ -298,6 +298,9 @@ public class Editor extends JPanel {
     //endregion
 
     public void setActiveCell(EditorCellBase activeCell) {
+        if (this.activeCell != null && this.activeCell != activeCell)
+            this.activeCell.setUnfocused();
+
         this.activeCell = activeCell;
     }
 

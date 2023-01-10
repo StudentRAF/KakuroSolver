@@ -25,7 +25,7 @@ public class CalculateBottomCombinationsRenderer extends RendererBase {
     private static final Color BACKGROUND_COLOR       = BASE_BACKGROUND_COLOR;
     private static final Color FOREGROUND_COLOR       = BASE_FOREGROUND_COLOR;
     private static final Color SEPARATOR_COLOR        = BASE_SEPARATOR_COLOR;
-    private static final Color BACKGROUND_FOCUS_COLOR = ColorFunctions.lighten(BACKGROUND_COLOR, 0.01f);
+    private static final Color BACKGROUND_FOCUS_COLOR = BASE_BACKGROUND_FOCUS_COLOR;
     private static final Color FOREGROUND_FOCUS_COLOR = ColorFunctions.lighten(FOREGROUND_COLOR, 0.1f);
 
     private static final int BORDER_THICKNESS = BASE_BORDER_THICKNESS;

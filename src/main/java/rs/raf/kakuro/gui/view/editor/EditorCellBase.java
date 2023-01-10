@@ -97,6 +97,7 @@ public abstract class EditorCellBase extends FlatButton {
 
             Editor.instance.setEditorCellFocused(Math.min(Math.max(row +    (event.getKeyCode() - 39) % 2, 0), Editor.rows     - 1),
                                                  Math.min(Math.max(column + (event.getKeyCode() - 38) % 2, 0), Editor.columns - 1));
+            Editor.instance.getActiveCell().requestFocus();
         }
 
     }
@@ -116,7 +117,7 @@ public abstract class EditorCellBase extends FlatButton {
             if (event.getCause().equals(FocusEvent.Cause.UNKNOWN))
                 Editor.instance.setActiveCell(cellBase);
 
-            Editor.instance.getActiveCell().requestFocus();
+            Editor.instance.setActiveCell(cellBase);
         }
 
         @Override

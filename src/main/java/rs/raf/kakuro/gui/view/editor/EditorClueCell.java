@@ -144,7 +144,7 @@ public class EditorClueCell extends EditorCellBase {
 
     private Point getBottomLocation(Font font) {
         FontMetrics metrics = new Canvas().getFontMetrics(font);
-        return new Point(28 - metrics.stringWidth(Integer.toString(cell.getBottomClue())) / 2, 73);
+        return new Point(29 - metrics.stringWidth(Integer.toString(cell.getBottomClue())) / 2, 73);
     }
 
     private void paintCellClueDivider(Graphics2D graphics) {

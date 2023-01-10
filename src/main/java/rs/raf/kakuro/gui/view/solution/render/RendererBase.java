@@ -14,10 +14,11 @@ import java.awt.RenderingHints;
 
 public abstract class RendererBase extends JPanel {
 
-    protected static final Color BASE_BORDER_COLOR     = new Color(51, 53, 55);
-    protected static final Color BASE_BACKGROUND_COLOR = new Color(59, 61, 63);
-    protected static final Color BASE_FOREGROUND_COLOR = new Color(162, 164, 166);
-    protected static final Color BASE_SEPARATOR_COLOR  = ColorFunctions.lighten(BASE_BACKGROUND_COLOR, 0.1f);
+    protected static final Color BASE_BORDER_COLOR           = new Color(51, 53, 55);
+    protected static final Color BASE_BACKGROUND_COLOR       = new Color(59, 61, 63);
+    protected static final Color BASE_FOREGROUND_COLOR       = new Color(162, 164, 166);
+    protected static final Color BASE_SEPARATOR_COLOR        = ColorFunctions.lighten(BASE_BACKGROUND_COLOR, 0.1f);
+    protected static final Color BASE_BACKGROUND_FOCUS_COLOR = new Color(22, 86, 158);
 
     protected static final int BASE_BORDER_THICKNESS = 2;
 
@@ -31,7 +32,6 @@ public abstract class RendererBase extends JPanel {
     protected static final int BASE_SEPARATOR_THICKNESS = 1;
     protected static final int BASE_SEPARATOR_PADDING   = 50;
     protected static final int BASE_COMPONENT_PADDING   = 16;
-    protected static final int BASE_TEXT_PADDING        = BASE_SEPARATOR_PADDING - 20;
 
     @Override
     protected void paintComponent(Graphics graphics) {
